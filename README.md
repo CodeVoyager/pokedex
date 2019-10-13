@@ -1,1 +1,1 @@
-# pokedex
+# Personal React Boilerplate (WIP)
