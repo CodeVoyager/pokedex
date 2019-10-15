@@ -1,0 +1,28 @@
+.pokemon-tile {
+  background: #ffcd46;
+  border-radius: 2px;
+  box-shadow: 0px 0px 7px #000;
+  box-sizing: border-box;
+  color: #47402e;
+  font-family: 'Fira Sans', sans-serif;
+  padding: 5px 5px 0;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow 0.2s ease-in;
+  width: 100%;
+  &:hover {
+    box-shadow: 3px 3px 15px #000;
+  }
+}
+.pokemon-tile-image {
+  background: #ffdf89;
+  border-radius: 3px;
+}
+.pokemon-tile-name {
+  /* color: #3C5BA7; */
+  color: #b11731;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 15px 0;
+  text-transform: uppercase;
+}

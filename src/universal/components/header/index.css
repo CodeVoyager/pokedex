@@ -1,0 +1,23 @@
+.pokemon-header {
+  text-align: center;
+  padding: 0 0 25px;
+}
+.pokemon-header-main {
+  font-family: 'Josefin Sans', sans-serif;
+  color: #ffcb05;
+  font-size: 70px;
+  line-height: 60px;
+  text-shadow: 0 3px 0px #3863ad, -3px 3px 0px #3863ad, 3px -3px 0px #3863ad,
+    0px -3px 0px #3863ad, -1px -3px 0px #3863ad, -2px -3px 0px #3863ad,
+    -3px -3px 0px #3863ad, 0px 0px 0px #3863ad, 3px 3px 0px #3863ad,
+    4px 3px 0px #3863ad, 5px 3px 0px #3863ad, 5px 2px 0px #3863ad,
+    6px -1px 0px #3863ad, 6px -0px 0px #3863ad, -6px -0px 0px #3863ad,
+    -6px -3px 0px #3863ad, 4px -3px 0px #3863ad;
+  /* -webkit-text-stroke: 2px #3863ad; */
+}
+.pokemon-header-sub {
+    color: #3863ad;
+    font-family: 'Fira Sans', sans-serif;
+    text-transform: uppercase;
+    font-weight: 900;
+}

@@ -1,0 +1,9 @@
+.pokemon-list-controls {
+  padding: 20px 1%;
+  .pokemon-buttons-container {
+    justify-content: center;
+  }
+  .pokemon-button {
+      margin: 0 10%;
+  }
+}

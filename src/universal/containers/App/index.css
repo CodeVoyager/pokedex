@@ -1,0 +1,9 @@
+.pokemon-app {
+    margin: 0 auto;
+    max-width: 720px;
+}
+
+body {
+    /* background: #FFCD46; */
+    background: #ffe;
+}

@@ -1,8 +1,9 @@
 require('dotenv').config();
-const Dotenv = require("dotenv-webpack");
+const Dotenv = require('dotenv-webpack');
 const isDev = (process.env.NODE_ENV || '').trim() !== 'production';
 const path = require('path');
 const AssetsPlugin = require('assets-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const webpack = require("webpack");
 
 module.exports = {
@@ -25,7 +26,7 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          { loader: 'style-loader' },
+          { loader: isDev ? 'style-loader' : MiniCssExtractPlugin.loader },
           {
             loader: 'css-loader',
             options: {
@@ -42,7 +43,11 @@ module.exports = {
   plugins: [
     new AssetsPlugin({ filename: 'webpack-assets.json', update: true }),
     new Dotenv({
-        path: "./.env"
+      path: './.env',
+    }),
+    new MiniCssExtractPlugin({
+      filename: isDev ? '[name].css' : '[name].[hash].css',
+      disable: false,
     }),
     // devMode ? new webpack.HotModuleReplacementPlugin() : undefined,
   ],

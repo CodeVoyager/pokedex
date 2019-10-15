@@ -2,8 +2,8 @@ import { Router } from 'express';
 import { fold } from 'fp-ts/lib/Either';
 import { pipe } from 'fp-ts/lib/pipeable';
 import React from 'react';
-import { PokemonResponse } from '../../types/pokeapi';
-import { App } from '../../universal/containers/App';
+import { PokemonResponse, Pokemon } from '../../types/pokeapi';
+import { AppWrapped } from '../../universal/containers/App';
 import { PokemonService } from '../../universal/service/pokeapi';
 import { IState } from '../../universal/state/store';
 import { extendEmptyState, renderPage } from '../utils/react';
@@ -33,7 +33,32 @@ indexRouter.get('/pokemon', (req, res, next) => {
         }
       ),
       state => {
-        res.send(renderPage(req, state, <App />));
+        res.send(renderPage(req, state, <AppWrapped />));
+      }
+    );
+  });
+});
+indexRouter.get('/pokemon/:id', (req, res, next) => {
+  PokemonService.get(req.params.id)().then(p => {
+    pipe(
+      p,
+      fold<Error, Pokemon, IState>(
+        e => {
+          return extendEmptyState({
+            error: e,
+          });
+        },
+        p => {
+          return extendEmptyState({
+            pokemon: {
+              page: 0,
+              current: p,
+            },
+          });
+        }
+      ),
+      state => {
+        res.send(renderPage(req, state, <AppWrapped />));
       }
     );
   });

@@ -1,5 +1,6 @@
 import { createAction } from 'redux-actions';
 import { strEnum } from '../../../../types';
+import './index.css';
 
 export const LoaderReduxActions = strEnum(['START_LOADING', 'STOP_LOADING']);
 
