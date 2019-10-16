@@ -1,5 +1,5 @@
-import { IState } from '../../store';
+import { State } from '../../store';
 
-export function isLoading(state: IState) {
+export function isLoading(state: State) {
   return state.loader.isLoading;
 }

@@ -5,7 +5,7 @@
   border-radius: 3px;
   color: #3C5BA7;
   cursor: pointer;
-  display: block;
+  display: inline-block;
   font-family: 'Fira Sans', sans-serif;
   font-size: 14px;
   font-weight: 700;
@@ -16,5 +16,11 @@
   min-width: 250px;
   &:hover {
     background: #ffc21c;
+  }
+  &.pokemon-button-mini {
+      font-size: 12px;
+      min-width: 0;
+      padding: 3px 5px;
+      width: auto;
   }
 }

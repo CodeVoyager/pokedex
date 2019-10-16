@@ -1,31 +1,48 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
 import './index.css';
+import { Button } from '../button';
 
-export interface TilePokemon {
+export interface PokemonTileItem {
   name: string;
   id: string;
 }
 
 export interface Props {
-  pokemon: TilePokemon;
+  pokemon: PokemonTileItem;
+  onCompareClick: () => void;
 }
 
-function getImageUrlFormId(id: string) {
+/**
+ * Hacky but works :)
+ */
+export function getImageUrlFormId(id: string) {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
 }
 
-function getUrlForId(id: string) {
+export function getUrlForId(id: string) {
   return `/pokemon/${id}`;
 }
 
-export function PokemonTile({ pokemon: { id, name } }: Props) {
+export function PokemonTile({ pokemon: { id, name }, onCompareClick }: Props) {
   return (
     <Link className="pokemon-tile" to={getUrlForId(id)}>
       <div className="pokemon-tile-image">
         <img src={getImageUrlFormId(id)} alt="pokemon-image" />
       </div>
       <div className="pokemon-tile-name">{name}</div>
+      <div className="pokemon-tile-controls">
+        <Button
+          onClick={(e: SyntheticEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onCompareClick();
+          }}
+          mini
+        >
+          Add to compare
+        </Button>
+      </div>
     </Link>
   );
 }

@@ -4,6 +4,15 @@
     justify-content: center;
   }
   .pokemon-button {
-      margin: 0 10%;
+    margin: 0 10%;
+  }
+}
+.pokemon-list {
+  position: relative;
+  .pokemon-compare-mini {
+    position: fixed;
+    left: 50%;
+    transform: translateX(350px);
+    top: 120px;
   }
 }

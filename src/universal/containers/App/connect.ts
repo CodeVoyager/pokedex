@@ -1,7 +1,7 @@
 import { isLoading } from '../../state/selectors/loader';
-import { IState } from '../../state/store';
+import { State } from '../../state/store';
 
-export function mapStateToProps(state: IState) {
+export function mapStateToProps(state: State) {
   return {
     isLoading: isLoading(state),
   };

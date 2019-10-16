@@ -9,6 +9,7 @@ import { PokemonTilesContainer } from '../../components/pokemon-tiles-container'
 import { ITEMS_PER_PAGE } from '../../service/pokeapi';
 import { mapDispatchToProps, mapStateToProps } from './connect';
 import './index.css';
+import { PokemonCompareMini } from '../../components/pokemon-compare-mini';
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -22,7 +23,14 @@ export class PokemonList extends React.Component<Props> {
     }
   }
   render() {
-    const { pokemonList, getPage, page, isLoading } = this.props;
+    const {
+      pokemonList,
+      getPage,
+      page,
+      isLoading,
+      pushToCompare,
+      compareCandidates,
+    } = this.props;
     const pokemons = pipe(
       pokemonList,
       fromNullable,
@@ -39,16 +47,19 @@ export class PokemonList extends React.Component<Props> {
             return { name, id };
           });
 
-          return <PokemonTilesContainer pokemons={pokemons} />;
+          return (
+            <PokemonTilesContainer
+              onCompareClick={pushToCompare}
+              pokemons={pokemons}
+            />
+          );
         }
       )
     );
 
     return (
       <div className="pokemon-list">
-        {isLoading ? (
-          <Loader />
-        ) : (
+        {isLoading ? null : (
           <>
             {pokemons}
             <div className="pokemon-list-controls">
@@ -62,6 +73,9 @@ export class PokemonList extends React.Component<Props> {
                   ) : null}
                 </>
               </ButtonsContainer>
+            </div>
+            <div className="pokemon-list-compare">
+              <PokemonCompareMini {...compareCandidates} />
             </div>
           </>
         )}

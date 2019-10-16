@@ -3,13 +3,17 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
-import { configureStore, IState } from '../../../universal/state/store';
+import { configureStore, State } from '../../../universal/state/store';
 import { pageTemplate } from '../../template';
 
-export function getEmptyState(): IState {
+export function getEmptyState(): State {
   return {
     pokemon: {
       page: 0,
+    },
+    pokemonCompare: {
+      candidates: {},
+      current: {},
     },
     loader: {
       count: 0,
@@ -18,7 +22,7 @@ export function getEmptyState(): IState {
   };
 }
 
-export function extendEmptyState(partialState: Partial<IState>): IState {
+export function extendEmptyState(partialState: Partial<State>): State {
   return {
     ...getEmptyState(),
     ...partialState,
@@ -27,7 +31,7 @@ export function extendEmptyState(partialState: Partial<IState>): IState {
 
 export function wrapPageElement(
   location: string,
-  state: IState,
+  state: State,
   page: JSX.Element
 ) {
   return (
@@ -37,7 +41,7 @@ export function wrapPageElement(
   );
 }
 
-export function renderPage(req: Request, state: IState, page: JSX.Element) {
+export function renderPage(req: Request, state: State, page: JSX.Element) {
   return pageTemplate(
     renderReact(wrapPageElement(req.path, state, page)),
     state

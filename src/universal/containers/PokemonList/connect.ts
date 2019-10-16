@@ -2,6 +2,7 @@ import { fold } from 'fp-ts/lib/Either';
 import { pipe } from 'fp-ts/lib/pipeable';
 import { Action, Dispatch } from 'redux';
 import { PokemonResponse } from '../../../types/pokeapi';
+import { PokemonTileItem } from '../../components/pokemon-tile';
 import { PokemonService } from '../../service/pokeapi';
 import {
   setErrorAction,
@@ -10,20 +11,29 @@ import {
   startLoadingAction,
   stopLoadingAction,
 } from '../../state/actions';
-import { pokemonList, pokemonListPage } from '../../state/selectors';
+import { pushPokemonCompareCandidateAction } from '../../state/actions/pokemon-compare';
+import {
+  compareCandidates,
+  pokemonList,
+  pokemonListPage,
+} from '../../state/selectors';
 import { isLoading } from '../../state/selectors/loader';
-import { IState } from '../../state/store';
+import { State } from '../../state/store';
 
-export function mapStateToProps(state: IState) {
+export function mapStateToProps(state: State) {
   return {
     page: pokemonListPage(state),
     pokemonList: pokemonList(state),
     isLoading: isLoading(state),
+    compareCandidates: compareCandidates(state),
   };
 }
 
 export function mapDispatchToProps(dispatch: Dispatch) {
   return {
+    pushToCompare: (p: PokemonTileItem) => () => {
+      dispatch(pushPokemonCompareCandidateAction(p));
+    },
     getPage: (page: number) => () => {
       dispatch(startLoadingAction());
 

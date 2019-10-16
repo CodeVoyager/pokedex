@@ -1,16 +1,13 @@
 import produce from 'immer';
 import { LoaderActions, LoaderReduxActions } from '../../actions';
-import { IState } from '../../store';
+import { State } from '../../store';
 
-export const initialState: IState['loader'] = {
+export const initialState: State['loader'] = {
   count: 0,
   isLoading: false,
 };
 
-type LoaderProducerReducerType = (
-  d: IState['loader'],
-  a: LoaderActions
-) => void;
+type LoaderProducerReducerType = (d: State['loader'], a: LoaderActions) => void;
 
 export const loaderProduced = produce<LoaderProducerReducerType>(
   (draftState, action) => {
@@ -32,6 +29,6 @@ export const loaderProduced = produce<LoaderProducerReducerType>(
 export function loader(
   state = initialState,
   action: LoaderActions
-): IState['loader'] {
+): State['loader'] {
   return loaderProduced(state, action);
 }

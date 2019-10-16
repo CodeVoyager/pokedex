@@ -23,6 +23,10 @@
   color: #b11731;
   font-weight: 700;
   font-size: 14px;
-  padding: 15px 0;
+  padding: 15px 0 5px;
   text-transform: uppercase;
+}
+.pokemon-tile-controls {
+    padding: 5px 0;
+    text-align: center;
 }

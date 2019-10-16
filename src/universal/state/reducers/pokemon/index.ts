@@ -1,17 +1,15 @@
 import produce from 'immer';
-import { Action } from 'redux';
+import { NamedAPIResource, Pokemon } from '../../../../types/pokeapi';
 import { PokemonActions, PokemonReduxActions } from '../../actions';
-import { IState } from '../../store';
-import { Pokemon, NamedAPIResource } from '../../../../types/pokeapi';
+import { State } from '../../store';
 
-export const initialState: IState['pokemon'] = {
+export type StatePart = State['pokemon'];
+
+export const initialState: StatePart = {
   page: 0,
 };
 
-type LoaderProducerReducerType = (
-  d: IState['pokemon'],
-  a: PokemonActions
-) => void;
+type LoaderProducerReducerType = (d: StatePart, a: PokemonActions) => void;
 
 export const pokemonProduced = produce<LoaderProducerReducerType>(
   (draftState, action) => {
@@ -33,6 +31,6 @@ export const pokemonProduced = produce<LoaderProducerReducerType>(
 export function pokemon(
   state = initialState,
   action: PokemonActions
-): IState['pokemon'] {
+): StatePart {
   return pokemonProduced(state, action);
 }

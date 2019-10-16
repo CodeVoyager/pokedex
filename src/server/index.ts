@@ -4,9 +4,8 @@ import express from 'express';
 import logger from 'morgan';
 import { indexRouter } from './routes/index';
 
-console.log(path.join(__dirname, 'public'));
-
 const app = express();
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

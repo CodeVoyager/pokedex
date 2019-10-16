@@ -1,7 +1,7 @@
 import assets from '../../../webpack-assets.json';
-import { IState } from '../../universal/state/store/index.js';
+import { State } from '../../universal/state/store/index.js';
 
-export const pageTemplate = (html: string, state: IState) => `
+export const pageTemplate = (html: string, state: State) => `
 <!DOCTYPE html>
 <html>
 
@@ -11,8 +11,8 @@ export const pageTemplate = (html: string, state: IState) => `
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Pokedex</title>
     ${
-    (process.env.NODE_ENV || '').trim() === 'production'
-        ? `<link rel="stylesheet" href="${(assets as any).app.css}">`
+      (process.env.NODE_ENV || '').trim() === 'production'
+        ? `<link rel="stylesheet" href="/${(assets as any).app.css}">`
         : ``
     }
     <link href="https://fonts.googleapis.com/css?family=Fira+Sans&display=swap" rel="stylesheet">
@@ -33,7 +33,7 @@ export const pageTemplate = (html: string, state: IState) => `
     </script>
     <script src="${
       (process.env.NODE_ENV || '').trim() === 'production'
-        ? (assets as any).app.js
+        ? `/${(assets as any).app.js}`
         : `http://localhost:5005/app.js`
     }"></script>
 </body>

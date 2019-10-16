@@ -1,7 +1,5 @@
 module.exports = {
-    postcss: {
-        variables: {
-
-        }
-    }
+  postcss: {
+    variables: {},
+  },
 };

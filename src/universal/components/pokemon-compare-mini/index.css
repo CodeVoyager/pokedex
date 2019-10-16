@@ -1,0 +1,26 @@
+.pokemon-compare-mini {
+  /* background: #ffcd46; */
+  padding: 10px;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 14px;
+}
+.pokemon-compare-mini-items {
+  display: flex;
+}
+.pokemon-compare-mini-image {
+  background: #ffdf89;
+  border-radius: 3px;
+  margin: 0 5px;
+}
+.pokemon-compare-mini-controls {
+  padding: 10px 0 0;
+  text-align: center;
+}
+.pokemon-compare-go-to {
+  color: #3c5ba7;
+  font-weight: 700;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}

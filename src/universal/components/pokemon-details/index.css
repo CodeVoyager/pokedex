@@ -2,7 +2,7 @@
   display: flex;
 }
 .pokemon-details-left {
-  width: 196px;
+  width: 240px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -15,6 +15,14 @@
   border-radius: 2px;
   margin: 1%;
   width: 48%;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  img {
+    height: auto;
+    max-height: 96px;
+    width: 100%;
+  }
 }
 .pokemon-details-stats {
   border-bottom: 1px solid #ffcd46;
@@ -22,6 +30,9 @@
   padding: 10px 0;
   color: #47402e;
   font-family: 'Fira Sans', sans-serif;
+  &:last-of-type {
+    border: none;
+  }
 }
 .pokemon-details-stats-name {
   color: #b11731;
@@ -29,5 +40,5 @@
   padding: 0 10px 0;
 }
 .pokemon-details-stats-value {
-    text-transform: capitalize;
+  text-transform: capitalize;
 }

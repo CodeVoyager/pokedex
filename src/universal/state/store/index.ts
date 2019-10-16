@@ -1,22 +1,33 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { NamedAPIResource, Pokemon } from '../../../types/pokeapi';
+import { PokemonTileItem } from '../../components/pokemon-tile';
 import { rootReducer } from '../reducers';
 
 declare global {
   // tslint:disable-next-line:interface-name
   interface Window {
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any;
-    __INITIAL_STATE__: IState;
+    __INITIAL_STATE__: State;
   }
 }
 
-export interface IState {
+export interface State {
   error?: Error;
   pokemon: {
     page: number;
     current?: Pokemon | null;
     list?: NamedAPIResource[] | null;
+  };
+  pokemonCompare: {
+    candidates: {
+      a?: PokemonTileItem;
+      b?: PokemonTileItem;
+    };
+    current: {
+      a?: Pokemon;
+      b?: Pokemon;
+    };
   };
   loader: {
     isLoading: boolean;
@@ -33,7 +44,7 @@ if ('production' !== process.env.NODE_ENV) {
       : compose;
 }
 
-export const configureStore = (initialState: IState) => {
+export const configureStore = (initialState: State) => {
   const store = createStore(
     rootReducer,
     initialState,

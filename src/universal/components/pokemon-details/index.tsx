@@ -6,18 +6,29 @@ import { fromNullable, fold } from 'fp-ts/lib/Option';
 
 export interface Props {
   pokemon: Pokemon;
+  k?: any;
 }
 
-export function PokemonDetails({ pokemon }: Props) {
+export function PokemonDetails({ pokemon, k }: Props) {
   return (
-    <div className="pokemon-details">
+    <div className="pokemon-details" key={k}>
       <div className="pokemon-details-left">
         {Object.entries(pokemon.sprites)
           .filter(([_, v]) => v)
+          .sort(([ka, _], [kb, __]) => {
+            if (0 === ka.indexOf('front')) {
+              if (0 === kb.indexOf('front')) {
+                return 0;
+              }
+
+              return -1;
+            }
+
+            return 1;
+          })
           .map(([k, v]) => (
-            <div className="pokemon-details-image">
+            <div className="pokemon-details-image" key={k}>
               <img
-                key={k}
                 alt={k.replace(/_/g, ' ')}
                 title={k.replace(/_/g, ' ')}
                 src={v}

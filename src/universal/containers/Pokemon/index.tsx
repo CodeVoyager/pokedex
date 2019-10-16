@@ -40,16 +40,12 @@ export class Pokemon extends React.Component<Props> {
       fromNullable,
       fold(() => notFoundMessage, p => <PokemonDetails pokemon={p} />)
     );
-    return isLoading ? (
-      <Loader />
-    ) : (
+    return isLoading ? null : (
       <div className="pokemon">
         {content}
         <div className="pokemon-list-controls">
           <ButtonsContainer>
-            <Button onClick={() => history.push('/pokemon')}>
-              Go back
-            </Button>
+            <Button onClick={() => history.push('/pokemon')}>Go back</Button>
           </ButtonsContainer>
         </div>
       </div>
