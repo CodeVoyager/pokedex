@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { AppWrapped } from '../universal/containers/App';
+import { App } from '../universal/containers/App';
 import { configureStore } from '../universal/state/store';
 
 const store = configureStore(window.__INITIAL_STATE__);
@@ -11,7 +11,7 @@ const store = configureStore(window.__INITIAL_STATE__);
 ReactDOM.hydrate(
   <BrowserRouter>
     <Provider store={store}>
-      <AppWrapped />
+      <App />
     </Provider>
   </BrowserRouter>,
   document.getElementById('app')
@@ -22,7 +22,7 @@ if ('production' !== process.env.NODE_ENV) {
       ReactDOM.render(
         <BrowserRouter>
           <Provider store={store}>
-            <AppWrapped />
+            <App />
           </Provider>
         </BrowserRouter>,
         document.getElementById('app')

@@ -1,59 +1,87 @@
-import { fold, fromNullable } from 'fp-ts/lib/Option';
+import { fold as foldEither } from 'fp-ts/lib/Either';
+import {
+  fold as foldOption,
+  fromNullable as optionFromNullable,
+} from 'fp-ts/lib/Option';
 import { pipe } from 'fp-ts/lib/pipeable';
-import React from 'React';
-import { connect } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
+import { Action, Dispatch } from 'redux';
+import { Pokemon as ApiPokemon } from '../../../types/pokeapi';
 import { Button } from '../../components/button';
 import { ButtonsContainer } from '../../components/buttons-container';
-import { Loader } from '../../components/loader';
 import { PokemonDetails } from '../../components/pokemon-details';
-import { mapDispatchToProps, mapStateToProps } from './connect';
+import { PokemonService } from '../../service/pokeapi';
+import {
+  setErrorAction,
+  setPokemonAction,
+  startLoadingAction,
+  stopLoadingAction,
+} from '../../state/actions';
+import { isLoading, pokemon as pokemonDetails } from '../../state/selectors';
 
 export interface PokemonRouteParams {
   id: string;
 }
 
-interface Props
-  extends ReturnType<typeof mapDispatchToProps>,
-    ReturnType<typeof mapStateToProps>,
-    RouteComponentProps<PokemonRouteParams> {}
+interface Props extends RouteComponentProps<PokemonRouteParams> {}
 
 export const notFoundMessage = (
   <div className="pokemon-not-found">Pokemon not found ;_;</div>
 );
 
-export class Pokemon extends React.Component<Props> {
-  componentDidMount() {
-    const {
-      get,
-      match: {
-        params: { id },
-      },
-    } = this.props;
-    get(id);
-  }
-  render() {
-    const { pokemon, isLoading, history } = this.props;
+function get(dispatch: Dispatch, id: string) {
 
-    const content = pipe(
-      pokemon,
-      fromNullable,
-      fold(() => notFoundMessage, p => <PokemonDetails pokemon={p} />)
+  dispatch(startLoadingAction());
+
+  return PokemonService.get(id)().then(p => {
+    pipe(
+      p,
+      foldEither<Error, ApiPokemon, Action>(
+        e => {
+          return setErrorAction(e);
+        },
+        p => {
+          return setPokemonAction(p);
+        }
+      ),
+      action => {
+        dispatch(action);
+        dispatch(stopLoadingAction());
+      }
     );
-    return isLoading ? null : (
-      <div className="pokemon">
-        {content}
-        <div className="pokemon-list-controls">
-          <ButtonsContainer>
-            <Button onClick={() => history.push('/pokemon')}>Go back</Button>
-          </ButtonsContainer>
-        </div>
-      </div>
-    );
-  }
+  });
 }
 
-export const PokemonWrapped = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Pokemon);
+export function Pokemon({
+  match: {
+    params: { id },
+  },
+  history,
+}: Props) {
+  const pokemon = useSelector(pokemonDetails);
+  const showLoader = useSelector(isLoading);
+  const content = pipe(
+    pokemon,
+    optionFromNullable,
+    foldOption(() => notFoundMessage, p => <PokemonDetails pokemon={p} />)
+  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!pokemon) {
+      get(dispatch, id);
+    }
+  }, []);
+
+  return showLoader ? null : (
+    <div className="pokemon">
+      {content}
+      <div className="pokemon-list-controls">
+        <ButtonsContainer>
+          <Button onClick={() => history.push('/pokemon')}>Go back</Button>
+        </ButtonsContainer>
+      </div>
+    </div>
+  );
+}

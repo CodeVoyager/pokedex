@@ -1,76 +1,113 @@
-import { fold, fromNullable } from 'fp-ts/lib/Option';
+import { fold as foldEither } from 'fp-ts/lib/Either';
+import {
+  fold as foldOption,
+  fromNullable as optionFromNullable
+} from 'fp-ts/lib/Option';
 import { pipe } from 'fp-ts/lib/pipeable';
-import React from 'React';
-import { connect } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
+import { Action, Dispatch } from 'redux';
+import { Pokemon } from '../../../types/pokeapi';
 import { Button } from '../../components/button';
 import { ButtonsContainer } from '../../components/buttons-container';
-import { Loader } from '../../components/loader';
 import { PokemonDetails } from '../../components/pokemon-details';
-import { mapDispatchToProps, mapStateToProps } from './connect';
-import { Pokemon } from '../../../types/pokeapi';
-
+import { PokemonService } from '../../service/pokeapi';
+import {
+  setErrorAction,
+  startLoadingAction,
+  stopLoadingAction,
+} from '../../state/actions';
+import { setPokemonCompareCurrentAction } from '../../state/actions/pokemon-compare';
+import {
+  compareCandidates,
+  compareCurrent,
+  isLoading,
+} from '../../state/selectors';
 import './index.css';
 
-interface Props
-  extends ReturnType<typeof mapDispatchToProps>,
-    ReturnType<typeof mapStateToProps>,
-    RouteComponentProps {}
+interface Props extends RouteComponentProps {}
 
 export const notFoundMessage = (
   <div className="pokemon-not-found">Pokemon not found ;_;</div>
 );
 
+export type ValidField = 'a' | 'b';
+
 export function renderItem(el?: Pokemon) {
   return pipe(
     el,
-    fromNullable,
-    fold(
+    optionFromNullable,
+    foldOption(
       () => notFoundMessage,
       p => <PokemonDetails key={p.id} k={p.id} pokemon={p} />
     )
   );
 }
 
-export class PokemonCompare extends React.Component<Props> {
-  componentDidMount() {
-    const { get, candidates, compared } = this.props;
+function get(dispatch: Dispatch, field: ValidField, id: string) {
+  dispatch(startLoadingAction());
 
-    if (
-      !compared.a ||
-      (compared.a && compared.a!.id.toString() !== candidates.a!.id)
-    ) {
-      get('a', candidates.a!.id);
-    }
-    if (
-      !compared.b ||
-      (compared.b && compared.b!.id.toString() !== candidates.b!.id)
-    ) {
-      get('b', candidates.b!.id);
-    }
-  }
-  render() {
-    const { isLoading, history, compared } = this.props;
-    const aElement = renderItem(compared.a);
-    const bElement = renderItem(compared.b);
-
-    return isLoading ? null : (
-      <div className="pokemon-compare">
-        <div className="pokemon-compare-items">
-          {aElement}
-          {bElement}
-        </div>
-        <div className="pokemon-compare-controls">
-          <ButtonsContainer>
-            <Button onClick={() => history.push('/pokemon')}>Go back</Button>
-          </ButtonsContainer>
-        </div>
-      </div>
+  return PokemonService.get(id)().then(p => {
+    pipe(
+      p,
+      foldEither<Error, Pokemon, Action>(
+        e => {
+          return setErrorAction(e);
+        },
+        p => {
+          return setPokemonCompareCurrentAction({
+            field,
+            item: p,
+          });
+        }
+      ),
+      action => {
+        dispatch(action);
+        dispatch(stopLoadingAction());
+      }
     );
-  }
+  });
 }
 
-export const PokemonCompareWrapped = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PokemonCompare);
+export function candidateShouldBeLoaded(
+  compared: ReturnType<typeof compareCurrent>,
+  candidates: ReturnType<typeof compareCandidates>
+) {
+  return (f: ValidField) =>
+    !compared[f] ||
+    (compared[f] && compared[f]!.id.toString() !== candidates[f]!.id);
+}
+
+export function PokemonCompare({ history }: Props) {
+  const compared = useSelector(compareCurrent);
+  const candidates = useSelector(compareCandidates);
+  const shouldBeLoaded = candidateShouldBeLoaded(compared, candidates);
+  const showLoading = useSelector(isLoading);
+  const aElement = renderItem(compared.a);
+  const bElement = renderItem(compared.b);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (shouldBeLoaded('a')) {
+      get(dispatch, 'a', candidates.a!.id);
+    }
+    if (shouldBeLoaded('b')) {
+      get(dispatch, 'b', candidates.b!.id);
+    }
+  });
+
+  return showLoading ? null : (
+    <div className="pokemon-compare">
+      <div className="pokemon-compare-items">
+        {aElement}
+        {bElement}
+      </div>
+      <div className="pokemon-compare-controls">
+        <ButtonsContainer>
+          <Button onClick={() => history.push('/pokemon')}>Go back</Button>
+        </ButtonsContainer>
+      </div>
+    </div>
+  );
+}

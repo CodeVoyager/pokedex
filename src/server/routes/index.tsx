@@ -4,7 +4,7 @@ import { pipe } from 'fp-ts/lib/pipeable';
 import React from 'react';
 import { Pokemon, PokemonResponse } from '../../types/pokeapi';
 import { PokemonTileItem } from '../../universal/components/pokemon-tile';
-import { AppWrapped } from '../../universal/containers/App';
+import { App } from '../../universal/containers/App';
 import { PokemonService } from '../../universal/service/pokeapi';
 import { State } from '../../universal/state/store';
 import { extendEmptyState, renderPage } from '../utils/react';
@@ -34,7 +34,7 @@ indexRouter.get('/pokemon', (req, res, next) => {
         }
       ),
       state => {
-        res.send(renderPage(req, state, <AppWrapped />));
+        res.send(renderPage(req, state, <App />));
       }
     );
   });
@@ -59,7 +59,7 @@ indexRouter.get('/pokemon/:id', (req, res, next) => {
         }
       ),
       state => {
-        res.send(renderPage(req, state, <AppWrapped />));
+        res.send(renderPage(req, state, <App />));
       }
     );
   });
@@ -91,7 +91,7 @@ indexRouter.get('/pokemon/compare/:aId/:bId', async (req, res, next) => {
           },
         },
       }),
-      <AppWrapped />
+      <App />
     )
   );
 });
