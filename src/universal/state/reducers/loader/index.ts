@@ -19,7 +19,7 @@ export const loader = handleActions(
       };
     },
     [LoaderReduxActions.STOP_LOADING]: s => {
-      const count = Math.max(s.count + 1, 0);
+      const count = Math.max(s.count - 1, 0);
       const isLoading = count > 0;
 
       return {

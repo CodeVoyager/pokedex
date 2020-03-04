@@ -32,7 +32,6 @@ export const notFoundMessage = (
 );
 
 function get(dispatch: Dispatch, id: string) {
-
   dispatch(startLoadingAction());
 
   return PokemonService.get(id)().then(p => {
@@ -69,7 +68,7 @@ export function Pokemon({
   );
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!pokemon) {
+    if (!pokemon || pokemon.id.toString() !== id) {
       get(dispatch, id);
     }
   }, []);
