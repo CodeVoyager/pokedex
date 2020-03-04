@@ -11,10 +11,10 @@ import { extendEmptyState, renderPage } from '../utils/react';
 
 const indexRouter = Router();
 
-indexRouter.get('/', (req, res, next) => {
+indexRouter.get('/', (_, res) => {
   res.redirect('/pokemon');
 });
-indexRouter.get('/pokemon', (req, res, next) => {
+indexRouter.get('/pokemon', (req, res) => {
   PokemonService.list(0)().then(ps => {
     pipe(
       ps,
@@ -39,7 +39,7 @@ indexRouter.get('/pokemon', (req, res, next) => {
     );
   });
 });
-indexRouter.get('/pokemon/:id', (req, res, next) => {
+indexRouter.get('/pokemon/:id', (req, res) => {
   PokemonService.get(req.params.id)().then(p => {
     pipe(
       p,
@@ -64,7 +64,10 @@ indexRouter.get('/pokemon/:id', (req, res, next) => {
     );
   });
 });
-indexRouter.get('/pokemon/compare/:aId/:bId', async (req, res, next) => {
+indexRouter.get('/pokemon/compare/:aId/:bId', async (req, res) => {
+  const {
+    params: { aId, bId },
+  } = req;
   const flatten = (x: Either<Error, Pokemon>) =>
     pipe(
       x,
@@ -74,8 +77,9 @@ indexRouter.get('/pokemon/compare/:aId/:bId', async (req, res, next) => {
     id: id.toString(),
     name,
   });
-  const a = flatten(await PokemonService.get(req.params.aId)());
-  const b = flatten(await PokemonService.get(req.params.bId)());
+  const [a, b] = await Promise.all(
+    [aId, bId].map(PokemonService.get).map(f => f())
+  ).then(xs => xs.map(flatten));
   res.send(
     renderPage(
       req,
