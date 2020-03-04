@@ -1,5 +1,5 @@
-import produce from 'immer';
-import { LoaderActions, LoaderReduxActions } from '../../actions';
+import { handleActions } from 'redux-actions';
+import { LoaderReduxActions } from '../../actions';
 import { State } from '../../store';
 
 export const initialState: State['loader'] = {
@@ -7,28 +7,26 @@ export const initialState: State['loader'] = {
   isLoading: false,
 };
 
-type LoaderProducerReducerType = (d: State['loader'], a: LoaderActions) => void;
+export const loader = handleActions(
+  {
+    [LoaderReduxActions.START_LOADING]: s => {
+      const count = s.count + 1;
+      const isLoading = count > 0;
 
-export const loaderProduced = produce<LoaderProducerReducerType>(
-  (draftState, action) => {
-    switch (action.type) {
-      case LoaderReduxActions.START_LOADING:
-        draftState.count += 1;
-        draftState.isLoading = !!draftState.count;
-        return;
-      case LoaderReduxActions.STOP_LOADING:
-        draftState.count -= 1;
-        draftState.isLoading = !!Math.max(draftState.count, 0);
-        return;
-      default:
-        return;
-    }
-  }
+      return {
+        count,
+        isLoading,
+      };
+    },
+    [LoaderReduxActions.STOP_LOADING]: s => {
+      const count = Math.max(s.count + 1, 0);
+      const isLoading = count > 0;
+
+      return {
+        count,
+        isLoading,
+      };
+    },
+  },
+  initialState
 );
-
-export function loader(
-  state = initialState,
-  action: LoaderActions
-): State['loader'] {
-  return loaderProduced(state, action);
-}

@@ -1,4 +1,3 @@
-import produce from 'immer';
 import { Pokemon } from '../../../../types/pokeapi';
 import { PokemonTileItem } from '../../../components/pokemon-tile';
 import {
@@ -15,40 +14,47 @@ export const initialState: StatePart = {
   current: {},
 };
 
-type comparePokemonsReducerType = (
-  d: StatePart,
-  a: PokemonCompareActions
-) => void;
-
-export const pokemonCompareProduced = produce<comparePokemonsReducerType>(
-  (draftState, action) => {
-    switch (action.type) {
-      case PokemonCompareReduxActions.CLEAR_POKEMON_COMPARE_CANDIDATES:
-        draftState.candidates = {};
-        return;
-      case PokemonCompareReduxActions.CLEAR_POKEMON_COMPARE_CURRENT:
-        draftState.current = {};
-        return;
-      case PokemonCompareReduxActions.PUSH_POKEMON_COMPARE_CANDIDATE:
-        const { b } = draftState.candidates;
-
-        draftState.candidates.a = b;
-        draftState.candidates.b = action.payload as PokemonTileItem;
-        return;
-      case PokemonCompareReduxActions.SET_POKEMON_COMPARE_CURRENT:
-        draftState.current[
-          (action.payload as CompareItem<Pokemon>).field
-        ] = (action.payload as CompareItem<Pokemon>).item;
-        return;
-      default:
-        return;
-    }
-  }
-);
-
 export function pokemonCompare(
   state = initialState,
   action: PokemonCompareActions
 ): StatePart {
-  return pokemonCompareProduced(state, action);
+  switch (action.type) {
+    case PokemonCompareReduxActions.CLEAR_POKEMON_COMPARE_CANDIDATES: {
+      return {
+        ...state,
+        candidates: {},
+      };
+    }
+    case PokemonCompareReduxActions.CLEAR_POKEMON_COMPARE_CURRENT: {
+      return {
+        ...state,
+        current: {},
+      };
+    }
+    case PokemonCompareReduxActions.PUSH_POKEMON_COMPARE_CANDIDATE: {
+      const {
+        candidates: { b },
+      } = state;
+
+      return {
+        ...state,
+        candidates: {
+          a: b,
+          b: action.payload as PokemonTileItem,
+        },
+      };
+    }
+    case PokemonCompareReduxActions.SET_POKEMON_COMPARE_CURRENT: {
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          [(action.payload as CompareItem<Pokemon>)
+            .field]: (action.payload as CompareItem<Pokemon>).item,
+        },
+      };
+    }
+    default:
+      return state;
+  }
 }
