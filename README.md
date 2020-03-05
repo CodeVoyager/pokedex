@@ -31,5 +31,4 @@ This is an universal app: it provides server and client side rendering.
 - Redux
 - Webpack
 - PostCSS
-- Immer
 - fp-ts
