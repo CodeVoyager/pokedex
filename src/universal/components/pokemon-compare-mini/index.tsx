@@ -2,7 +2,7 @@ import { fold, fromNullable } from 'fp-ts/lib/Option';
 import { pipe } from 'fp-ts/lib/pipeable';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getImageUrlFormId, PokemonTileItem } from '../pokemon-tile';
+import { getImageUrlForId, PokemonTileItem } from '../pokemon-tile';
 import './index.css';
 
 export interface Props {
@@ -22,7 +22,7 @@ export function renderItem(el?: PokemonTileItem) {
       () => null,
       el => (
         <div className="pokemon-compare-mini-image">
-          <img src={getImageUrlFormId(el.id)} alt="pokemon-image" />
+          <img src={getImageUrlForId(el.id)} alt="pokemon-image" />
         </div>
       )
     )

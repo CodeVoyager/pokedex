@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`State::Actions Pokemon setPokemonAction creator should return correct action 1`] = `
+Object {
+  "payload": Object {
+    "pokemon": true,
+  },
+  "type": "SET_POKEMON",
+}
+`;
+
+exports[`State::Actions Pokemon setPokemonListAction creator should return correct action 1`] = `
+Object {
+  "payload": Array [],
+  "type": "SET_POKEMON_LIST",
+}
+`;
+
+exports[`State::Actions Pokemon setPokemonListPageAction creator should return correct action 1`] = `
+Object {
+  "payload": 1,
+  "type": "SET_POKEMON_LIST_PAGE",
+}
+`;

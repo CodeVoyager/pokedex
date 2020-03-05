@@ -3,7 +3,7 @@ import React, { SyntheticEvent } from 'react';
 import './index.css';
 
 export interface Props {
-  children: null | string | React.ReactChild | React.ReactChild[];
+  children?: null | string | React.ReactChild | React.ReactChild[];
   onClick?: (e: SyntheticEvent) => void;
   mini?: boolean;
 }

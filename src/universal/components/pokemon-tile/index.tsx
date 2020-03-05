@@ -16,7 +16,7 @@ export interface Props {
 /**
  * Hacky but works :)
  */
-export function getImageUrlFormId(id: string) {
+export function getImageUrlForId(id: string) {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
 }
 
@@ -28,7 +28,7 @@ export function PokemonTile({ pokemon: { id, name }, onCompareClick }: Props) {
   return (
     <Link className="pokemon-tile" to={getUrlForId(id)}>
       <div className="pokemon-tile-image">
-        <img src={getImageUrlFormId(id)} alt="pokemon-image" />
+        <img src={getImageUrlForId(id)} alt="pokemon-image" />
       </div>
       <div className="pokemon-tile-name">{name}</div>
       <div className="pokemon-tile-controls">

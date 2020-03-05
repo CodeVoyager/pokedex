@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component Button should handle specifing button as mini version 1`] = `
+<button
+  className="pokemon-button pokemon-button-mini"
+/>
+`;
+
+exports[`Component Button should use specified children 1`] = `
+<button
+  className="pokemon-button "
+>
+  CONTENT
+</button>
+`;
+
+exports[`Component Button should use specified children 2`] = `
+<button
+  className="pokemon-button "
+>
+  <div>
+    CONTENT IN DIV
+  </div>
+</button>
+`;
+
+exports[`Component Button should work on it's own 1`] = `
+<button
+  className="pokemon-button "
+/>
+`;

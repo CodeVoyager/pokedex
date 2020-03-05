@@ -1,5 +1,4 @@
-import { handleActions } from 'redux-actions';
-import { LoaderReduxActions } from '../../actions';
+import { LoaderActions, LoaderReduxActions } from '../../actions';
 import { State } from '../../store';
 
 export const initialState: State['loader'] = {
@@ -7,26 +6,27 @@ export const initialState: State['loader'] = {
   isLoading: false,
 };
 
-export const loader = handleActions(
-  {
-    [LoaderReduxActions.START_LOADING]: s => {
-      const count = s.count + 1;
+export function loader(state = initialState, action: LoaderActions) {
+  switch (action.type) {
+    case LoaderReduxActions.START_LOADING: {
+      const count = state.count + 1;
       const isLoading = count > 0;
 
       return {
         count,
         isLoading,
       };
-    },
-    [LoaderReduxActions.STOP_LOADING]: s => {
-      const count = Math.max(s.count - 1, 0);
+    }
+    case LoaderReduxActions.STOP_LOADING: {
+      const count = Math.max(state.count - 1, 0);
       const isLoading = count > 0;
 
       return {
         count,
         isLoading,
       };
-    },
-  },
-  initialState
-);
+    }
+    default:
+      return state;
+  }
+}

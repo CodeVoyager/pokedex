@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`State::Actions PokemonCompare clearPokemonCompareCandidatesAction creator should return correct action 1`] = `
+Object {
+  "type": "CLEAR_POKEMON_COMPARE_CURRENT",
+}
+`;
+
+exports[`State::Actions PokemonCompare clearPokemonCompareCurrentAction creator should return correct action 1`] = `
+Object {
+  "type": "CLEAR_POKEMON_COMPARE_CURRENT",
+}
+`;
+
+exports[`State::Actions PokemonCompare pushPokemonCompareCandidateAction creator should return correct action 1`] = `
+Object {
+  "payload": Object {
+    "foo": "bar",
+  },
+  "type": "PUSH_POKEMON_COMPARE_CANDIDATE",
+}
+`;
+
+exports[`State::Actions PokemonCompare setPokemonCompareCurrentAction creator should return correct action 1`] = `
+Object {
+  "payload": Object {
+    "foo": "bar",
+  },
+  "type": "SET_POKEMON_COMPARE_CURRENT",
+}
+`;

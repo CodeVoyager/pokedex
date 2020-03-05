@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`State::Actions Loader startLoadingAction creator should return correct action 1`] = `
+Object {
+  "type": "START_LOADING",
+}
+`;
+
+exports[`State::Actions Loader stopLoadingAction creator should return correct action 1`] = `
+Object {
+  "type": "STOP_LOADING",
+}
+`;
