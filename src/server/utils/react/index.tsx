@@ -44,7 +44,8 @@ export function wrapPageElement(
 export function renderPage(req: Request, state: State, page: JSX.Element) {
   return pageTemplate(
     renderReact(wrapPageElement(req.path, state, page)),
-    state
+    state,
+    process.env.NODE_ENV
   );
 }
 

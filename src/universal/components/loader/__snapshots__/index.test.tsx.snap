@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component::ButtonsContainer should render correctly 1`] = `
+<div
+  className="pokemon-loader"
+>
+  <div
+    className="pokemon-loader-ring"
+  >
+    <div
+      className="pokemon-loader-center"
+    />
+  </div>
+</div>
+`;

@@ -14,7 +14,7 @@ export interface Props {
 }
 
 /**
- * Hacky but works :)
+ * It just works :)
  */
 export function getImageUrlForId(id: string) {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;

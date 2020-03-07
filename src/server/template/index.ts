@@ -1,7 +1,7 @@
 import assets from '../../../webpack-assets.json';
 import { State } from '../../universal/state/store/index.js';
 
-export const pageTemplate = (html: string, state: State) => `
+export const pageTemplate = (html: string, state: State, env?: string) => `
 <!DOCTYPE html>
 <html>
 
@@ -11,7 +11,7 @@ export const pageTemplate = (html: string, state: State) => `
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Pokedex</title>
     ${
-      (process.env.NODE_ENV || '').trim() === 'production'
+      (env || '').trim() === 'production'
         ? `<link rel="stylesheet" href="/${(assets as any).app.css}">`
         : ``
     }
@@ -26,13 +26,13 @@ export const pageTemplate = (html: string, state: State) => `
     <script>
       window.__INITIAL_STATE__ = ${JSON.stringify(state)};
       ${
-        (process.env.NODE_ENV || '').trim() === 'production'
+        (env || '').trim() === 'production'
           ? '(window.__REACT_DEVTOOLS_GLOBAL_HOOK__ || {}).inject = function () {}'
           : ''
       }
     </script>
     <script src="${
-      (process.env.NODE_ENV || '').trim() === 'production'
+      (env || '').trim() === 'production'
         ? `/${(assets as any).app.js}`
         : `http://localhost:5005/app.js`
     }"></script>

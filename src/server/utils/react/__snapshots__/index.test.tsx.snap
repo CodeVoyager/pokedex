@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`React server utils extendEmptyState() should extend valid state with supplied state 1`] = `
+Object {
+  "loader": Object {
+    "count": 3,
+    "isLoading": true,
+  },
+  "pokemon": Object {
+    "page": 0,
+  },
+  "pokemonCompare": Object {
+    "candidates": Object {},
+    "current": Object {},
+  },
+}
+`;
+
+exports[`React server utils getEmptyState() should return valid state 1`] = `
+Object {
+  "loader": Object {
+    "count": 0,
+    "isLoading": false,
+  },
+  "pokemon": Object {
+    "page": 0,
+  },
+  "pokemonCompare": Object {
+    "candidates": Object {},
+    "current": Object {},
+  },
+}
+`;
+
+exports[`React server utils renderPage() should render valid page 1`] = `
+"
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=\\"UTF-8\\">
+    <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0\\">
+    <meta http-equiv=\\"X-UA-Compatible\\" content=\\"ie=edge\\">
+    <title>Pokedex</title>
+    
+    <link href=\\"https://fonts.googleapis.com/css?family=Fira+Sans&display=swap\\" rel=\\"stylesheet\\">
+    <link href=\\"https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap\\" rel=\\"stylesheet\\">
+</head>
+
+<body>
+    <main class=\\"container\\">
+        <div id=\\"app\\"><div class=\\"static-router\\" data-reactroot=\\"\\"><div class=\\"static-provider\\" store=\\"[object Object]\\"><div>CONTENT</div></div></div></div>
+    </main>
+    <script>
+      window.__INITIAL_STATE__ = {\\"foo\\":\\"bar\\"};
+      
+    </script>
+    <script src=\\"http://localhost:5005/app.js\\"></script>
+</body>
+</html>
+"
+`;
+
+exports[`React server utils renderReact() should render valid page 1`] = `"<div data-reactroot=\\"\\">CONTENT</div>"`;
+
+exports[`React server utils wrapPageElement() should render valid page 1`] = `
+<div
+  className="static-router"
+>
+  <Provider
+    store={
+      Object {
+        "dispatch": [Function],
+        "getState": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+        Symbol(observable): [Function],
+      }
+    }
+  >
+    <div>
+      CONTENT
+    </div>
+  </Provider>
+</div>
+`;
