@@ -19,21 +19,16 @@ import {
   stopLoadingAction,
 } from '../../state/actions';
 import { setPokemonCompareCurrentAction } from '../../state/actions/pokemon-compare';
-import {
-  compareCandidates,
-  compareCurrent,
-  isLoading,
-} from '../../state/selectors';
-import { State } from '../../state/store';
+import { compareCurrent, isLoading } from '../../state/selectors';
 import './index.css';
 
-interface Props extends RouteComponentProps {}
+interface Props extends RouteComponentProps<{ aId: string; bId: string }> {}
 
 export const notFoundMessage = (
   <div className="pokemon-not-found">Pokemon not found ;_;</div>
 );
 
-export type ValidField = keyof State['pokemonCompare']['current'];
+export type ValidField = keyof ReturnType<typeof compareCurrent>;
 
 export function renderItem(el?: Pokemon) {
   return pipe(
@@ -72,28 +67,28 @@ function get(dispatch: Dispatch, field: ValidField, id: Pokemon['id']) {
 }
 
 export function candidateShouldBeLoaded(
-  compared: ReturnType<typeof compareCurrent>,
-  candidates: ReturnType<typeof compareCandidates>
+  compared: ReturnType<typeof compareCurrent>
 ) {
-  return (f: ValidField) =>
-    !compared[f] || (compared[f] && compared[f]!.id !== candidates[f]!.id);
+  return (f: ValidField) => (id: number) =>
+    !compared[f] || compared[f]!.id !== id;
 }
 
-export function PokemonCompare({ history }: Props) {
+export function PokemonCompare({ history, match: { params } }: Props) {
+  const aId = parseInt(params.aId, 10);
+  const bId = parseInt(params.bId, 10);
   const compared = useSelector(compareCurrent);
-  const candidates = useSelector(compareCandidates);
-  const shouldBeLoaded = candidateShouldBeLoaded(compared, candidates);
+  const shouldBeLoaded = candidateShouldBeLoaded(compared);
   const showLoading = useSelector(isLoading);
   const aElement = renderItem(compared.a);
   const bElement = renderItem(compared.b);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (shouldBeLoaded('a')) {
-      get(dispatch, 'a', candidates.a!.id);
+    if (shouldBeLoaded('a')(aId)) {
+      get(dispatch, 'a', aId);
     }
-    if (shouldBeLoaded('b')) {
-      get(dispatch, 'b', candidates.b!.id);
+    if (shouldBeLoaded('b')(bId)) {
+      get(dispatch, 'b', bId);
     }
   });
 
