@@ -42,8 +42,8 @@ export function renderPokemons(ps: ReturnType<typeof pokemonList>) {
         const pokemons = ps.map(({ name, url }) => {
           const id = pipe(
             url.split('/'),
-            ns => fromNullable<string>(ns[ns.length - 2]),
-            optionFold(() => '-1', n => n)
+            ns => fromNullable(ns[ns.length - 2]),
+            optionFold(() => -1, s => parseInt(s, 10))
           );
 
           return { name, id };
@@ -106,10 +106,14 @@ export function PokemonList() {
             <ButtonsContainer>
               <>
                 {list && page > 0 ? (
-                  <Button onClick={getPage(dispatch, page - 1)}>Previous page</Button>
+                  <Button onClick={getPage(dispatch, page - 1)}>
+                    Previous page
+                  </Button>
                 ) : null}
                 {list && list.length === ITEMS_PER_PAGE ? (
-                  <Button onClick={getPage(dispatch, page + 1)}>Next page</Button>
+                  <Button onClick={getPage(dispatch, page + 1)}>
+                    Next page
+                  </Button>
                 ) : null}
               </>
             </ButtonsContainer>

@@ -40,7 +40,9 @@ indexRouter.get('/pokemon', (req, res) => {
   });
 });
 indexRouter.get('/pokemon/:id', (req, res) => {
-  PokemonService.get(req.params.id)().then(p => {
+  const id = parseInt(req.params.id, 10);
+
+  PokemonService.get(id)().then(p => {
     pipe(
       p,
       fold<Error, Pokemon, State>(
@@ -74,12 +76,15 @@ indexRouter.get('/pokemon/compare/:aId/:bId', async (req, res) => {
       fold<Error, Pokemon, Pokemon | undefined>(() => undefined, p => p)
     );
   const toPokemonTileItem = ({ id, name }: Pokemon): PokemonTileItem => ({
-    id: id.toString(),
+    id: id,
     name,
   });
   const [a, b] = await Promise.all(
-    [aId, bId].map(PokemonService.get).map(f => f())
-  ).then(xs => xs.map(flatten));
+    [aId, bId]
+      .map(x => parseInt(x, 10))
+      .map(PokemonService.get)
+      .map(f => f())
+  ).then<ReturnType<typeof flatten>[], never>(xs => xs.map(flatten));
   res.send(
     renderPage(
       req,

@@ -1,7 +1,7 @@
 import { fold as foldEither } from 'fp-ts/lib/Either';
 import {
   fold as foldOption,
-  fromNullable as optionFromNullable
+  fromNullable as optionFromNullable,
 } from 'fp-ts/lib/Option';
 import { pipe } from 'fp-ts/lib/pipeable';
 import React, { useEffect } from 'react';
@@ -45,7 +45,7 @@ export function renderItem(el?: Pokemon) {
   );
 }
 
-function get(dispatch: Dispatch, field: ValidField, id: string) {
+function get(dispatch: Dispatch, field: ValidField, id: Pokemon['id']) {
   dispatch(startLoadingAction());
 
   return PokemonService.get(id)().then(p => {
@@ -75,8 +75,7 @@ export function candidateShouldBeLoaded(
   candidates: ReturnType<typeof compareCandidates>
 ) {
   return (f: ValidField) =>
-    !compared[f] ||
-    (compared[f] && compared[f]!.id.toString() !== candidates[f]!.id);
+    !compared[f] || (compared[f] && compared[f]!.id !== candidates[f]!.id);
 }
 
 export function PokemonCompare({ history }: Props) {

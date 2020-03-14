@@ -31,7 +31,7 @@ export const notFoundMessage = (
   <div className="pokemon-not-found">Pokemon not found ;_;</div>
 );
 
-function get(dispatch: Dispatch, id: string) {
+function get(dispatch: Dispatch, id: ApiPokemon['id']) {
   dispatch(startLoadingAction());
 
   return PokemonService.get(id)().then(p => {
@@ -59,6 +59,7 @@ export function Pokemon({
   },
   history,
 }: Props) {
+  const pokemonId = parseInt(id, 10);
   const pokemon = useSelector(pokemonDetails);
   const showLoader = useSelector(isLoading);
   const content = pipe(
@@ -68,8 +69,8 @@ export function Pokemon({
   );
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!pokemon || pokemon.id.toString() !== id) {
-      get(dispatch, id);
+    if (!pokemon || pokemon.id !== pokemonId) {
+      get(dispatch, pokemonId);
     }
   }, []);
 

@@ -1,12 +1,10 @@
 import React, { SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
-import './index.css';
+import { Pokemon } from '../../../types/pokeapi';
 import { Button } from '../button';
+import './index.css';
 
-export interface PokemonTileItem {
-  name: string;
-  id: string;
-}
+export type PokemonTileItem = Pick<Pokemon, 'id' | 'name'>;
 
 export interface Props {
   pokemon: PokemonTileItem;
@@ -16,11 +14,11 @@ export interface Props {
 /**
  * It just works :)
  */
-export function getImageUrlForId(id: string) {
+export function getImageUrlForId(id: Pokemon['id']) {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
 }
 
-export function getUrlForId(id: string) {
+export function getUrlForId(id: Pokemon['id']) {
   return `/pokemon/${id}`;
 }
 

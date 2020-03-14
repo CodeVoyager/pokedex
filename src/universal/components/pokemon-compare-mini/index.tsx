@@ -4,13 +4,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { getImageUrlForId, PokemonTileItem } from '../pokemon-tile';
 import './index.css';
+import { Pokemon } from '../../../types/pokeapi';
 
 export interface Props {
   a?: PokemonTileItem;
   b?: PokemonTileItem;
 }
 
-export function getUrlForIds(idA: string, idB: string) {
+export function getUrlForIds(idA: Pokemon['id'], idB: Pokemon['id']) {
   return `/pokemon/compare/${idA}/${idB}`;
 }
 

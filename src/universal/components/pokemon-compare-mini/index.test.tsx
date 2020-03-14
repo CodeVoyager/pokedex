@@ -11,7 +11,7 @@ describe('Component', () => {
   describe('PokemonCompareMini', () => {
     describe('getUrlForIds', () => {
       test('should return correct URL', () => {
-        expect(getUrlForIds('1', '2')).toBe('/pokemon/compare/1/2');
+        expect(getUrlForIds(1, 2)).toBe('/pokemon/compare/1/2');
       });
     });
     describe('renderItem', () => {
@@ -33,7 +33,7 @@ describe('Component', () => {
     });
     it('should not create link if compare set is not full', () => {
       const pokemon: PokemonTileItem = {
-        id: '1',
+        id: 1,
         name: 'POKEMON',
       };
       const component1 = shallow(
@@ -51,7 +51,7 @@ describe('Component', () => {
     });
     it('should create redirect link on both pokemon present', () => {
       const pokemon: PokemonTileItem = {
-        id: '1',
+        id: 1,
         name: 'POKEMON',
       };
       const component = shallow(<PokemonCompareMini a={pokemon} b={pokemon} />);

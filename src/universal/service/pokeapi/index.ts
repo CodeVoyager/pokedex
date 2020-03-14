@@ -11,9 +11,9 @@ const API_ENDPOINT = 'https://pokeapi.co/api/v2';
 
 export const ITEMS_PER_PAGE = 20;
 
-export interface PokeAPIService<U> {
+export interface PokeAPIService<U extends { id: number }> {
   list: (page: number) => TaskEither<Error, PokemonResponse>;
-  get: (id: string) => TaskEither<Error, U>;
+  get: (id: U['id']) => TaskEither<Error, U>;
 }
 
 const cache: { [x: string]: { [y: string]: any } } = {};
@@ -45,7 +45,9 @@ function setInCacheMiddleware<T>(name: string) {
   };
 }
 
-function ApiRequestFactory<T>(endpoint: string): PokeAPIService<T> {
+function ApiRequestFactory<T extends { id: number }>(
+  endpoint: string
+): PokeAPIService<T> {
   return {
     list: (page: number = 0) => {
       const valFromCache = getFromCache<PokemonResponse>(endpoint, page);
@@ -71,7 +73,7 @@ function ApiRequestFactory<T>(endpoint: string): PokeAPIService<T> {
         reason => new Error(String(reason))
       );
     },
-    get: (id: string) => {
+    get: (id: T['id']) => {
       const valFromCache = getFromCache<T>(endpoint, id);
 
       if (valFromCache) {
