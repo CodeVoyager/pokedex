@@ -2,14 +2,12 @@ import { fold, fromNullable } from 'fp-ts/lib/Option';
 import { pipe } from 'fp-ts/lib/pipeable';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Pokemon } from '../../../types/pokeapi';
+import { State } from '../../state/store';
 import { getImageUrlForId, PokemonTileItem } from '../pokemon-tile';
 import './index.css';
-import { Pokemon } from '../../../types/pokeapi';
 
-export interface Props {
-  a?: PokemonTileItem;
-  b?: PokemonTileItem;
-}
+export type Props = State['pokemonCompare']['candidates'];
 
 export function getUrlForIds(idA: Pokemon['id'], idB: Pokemon['id']) {
   return `/pokemon/compare/${idA}/${idB}`;

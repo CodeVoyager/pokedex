@@ -24,6 +24,7 @@ import {
   compareCurrent,
   isLoading,
 } from '../../state/selectors';
+import { State } from '../../state/store';
 import './index.css';
 
 interface Props extends RouteComponentProps {}
@@ -32,7 +33,7 @@ export const notFoundMessage = (
   <div className="pokemon-not-found">Pokemon not found ;_;</div>
 );
 
-export type ValidField = 'a' | 'b';
+export type ValidField = keyof State['pokemonCompare']['current'];
 
 export function renderItem(el?: Pokemon) {
   return pipe(
