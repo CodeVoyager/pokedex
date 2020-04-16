@@ -1,6 +1,7 @@
 import { Request } from 'express';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
+import { Helmet } from 'react-helmet';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
 import { configureStore, State } from '../../../universal/state/store';
@@ -50,5 +51,15 @@ export function renderPage(req: Request, state: State, page: JSX.Element) {
 }
 
 export function renderReact(page: JSX.Element) {
-  return ReactDOMServer.renderToString(page);
+  Helmet.canUseDOM = false;
+
+  const body = ReactDOMServer.renderToString(page);
+  const helmet = Helmet.renderStatic();
+
+  return {
+    body,
+    head: {
+      title: helmet.title.toString(),
+    },
+  };
 }

@@ -41,7 +41,7 @@ exports[`React server utils renderPage() should render valid page 1`] = `
     <meta charset=\\"UTF-8\\">
     <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0\\">
     <meta http-equiv=\\"X-UA-Compatible\\" content=\\"ie=edge\\">
-    <title>Pokedex</title>
+    <title data-react-helmet=\\"true\\"></title>
     
     <link href=\\"https://fonts.googleapis.com/css?family=Fira+Sans&display=swap\\" rel=\\"stylesheet\\">
     <link href=\\"https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap\\" rel=\\"stylesheet\\">
@@ -61,7 +61,14 @@ exports[`React server utils renderPage() should render valid page 1`] = `
 "
 `;
 
-exports[`React server utils renderReact() should render valid page 1`] = `"<div data-reactroot=\\"\\">CONTENT</div>"`;
+exports[`React server utils renderReact() should render valid page 1`] = `
+Object {
+  "body": "<div data-reactroot=\\"\\">CONTENT</div>",
+  "head": Object {
+    "title": "<title data-react-helmet=\\"true\\"></title>",
+  },
+}
+`;
 
 exports[`React server utils wrapPageElement() should render valid page 1`] = `
 <div

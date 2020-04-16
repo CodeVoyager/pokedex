@@ -9,13 +9,24 @@ jest.mock('../../../webpack-assets.json', () => ({
 }));
 
 describe('pageTemplate()', () => {
-  const html = 'CONTENT';
+  const html = {
+    body: 'CONTENT',
+    head: {
+      title: 'TITLE',
+    },
+  };
   const state = { foo: 'bar' } as any;
+  const ASSETS = {
+    app: {
+      js: 'APP.js',
+      css: 'APP.css',
+    },
+  };
 
   it('should insert supplied page HTML into #app', () => {
     const result = load(pageTemplate(html, state));
 
-    expect(result('#app').html()).toEqual(html);
+    expect(result('#app').html()).toEqual(html.body);
   });
 
   it('should insert supplied state into page', () => {
@@ -28,18 +39,22 @@ describe('pageTemplate()', () => {
 
   it('should use webpack generated filenames for PRODUCTION env', () => {
     const result = load(pageTemplate(html, state, 'production'));
-    const stylesheet = result('head link[rel=stylesheet][href="/APP.css"]');
-    const script = result('script[src="/APP.js"]');
+    const stylesheet = result(
+      `link[rel=stylesheet][href="/${ASSETS.app.css}"]`
+    );
+    const script = result(`script[src="/${ASSETS.app.js}"]`);
     const script2 = result('script[src="http://localhost:5005/app.js"]');
 
     expect(stylesheet.length).toEqual(1);
     expect(script.length).toEqual(1);
     expect(script2.length).toEqual(0);
   });
-  it('should use webpack generated filenames for DEV env', () => {
+  it('should NOT use webpack generated filenames for DEV env', () => {
     const result = load(pageTemplate(html, state, 'dev'));
-    const stylesheet = result('head link[rel=stylesheet][href="/APP.css"]');
-    const script = result('script[src="/APP.js"]');
+    const stylesheet = result(
+      `link[rel=stylesheet][href="/${ASSETS.app.css}"]`
+    );
+    const script = result(`script[src="/${ASSETS.app.js}"]`);
     const script2 = result('script[src="http://localhost:5005/app.js"]');
 
     expect(stylesheet.length).toEqual(0);

@@ -25,7 +25,7 @@ export interface PokemonRouteParams {
   id: string;
 }
 
-interface Props extends RouteComponentProps<PokemonRouteParams> {}
+interface PokemonProps extends RouteComponentProps<PokemonRouteParams> {}
 
 export const notFoundMessage = (
   <div className="pokemon-not-found">Pokemon not found ;_;</div>
@@ -58,7 +58,7 @@ export function Pokemon({
     params: { id },
   },
   history,
-}: Props) {
+}: PokemonProps) {
   const pokemonId = parseInt(id, 10);
   const pokemon = useSelector(pokemonDetails);
   const showLoader = useSelector(isLoading);

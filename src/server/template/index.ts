@@ -1,7 +1,18 @@
 import assets from '../../../webpack-assets.json';
 import { State } from '../../universal/state/store/index.js';
 
-export const pageTemplate = (html: string, state: State, env?: string) => `
+interface TemplateHtml {
+  body: string;
+  head: {
+    title: string;
+  };
+}
+
+export const pageTemplate = (
+  { body, head: { title } }: TemplateHtml,
+  state: State,
+  env?: string
+) => `
 <!DOCTYPE html>
 <html>
 
@@ -9,7 +20,7 @@ export const pageTemplate = (html: string, state: State, env?: string) => `
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Pokedex</title>
+    ${title}
     ${
       (env || '').trim() === 'production'
         ? `<link rel="stylesheet" href="/${(assets as any).app.css}">`
@@ -21,7 +32,7 @@ export const pageTemplate = (html: string, state: State, env?: string) => `
 
 <body>
     <main class="container">
-        <div id="app">${html}</div>
+        <div id="app">${body}</div>
     </main>
     <script>
       window.__INITIAL_STATE__ = ${JSON.stringify(state)};

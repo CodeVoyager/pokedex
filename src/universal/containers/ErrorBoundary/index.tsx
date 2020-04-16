@@ -10,15 +10,16 @@ export class ErrorBoundary extends React.Component<any, State> {
     this.state = { hasError: false };
   }
 
-  // static getDerivedStateFromError(e: Error) {
-  //   return { hasError: true };
-  // }
+  static getDerivedStateFromError(e: Error) {
+    return { hasError: true };
+  }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     this.setState({ hasError: true });
-    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
+    // console.log('----------------');
     // console.error(error, errorInfo);
+    // console.log('----------------');
   }
 
   render() {
