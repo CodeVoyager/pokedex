@@ -22,7 +22,8 @@ import { setPokemonCompareCurrentAction } from '../../state/actions/pokemon-comp
 import { compareCurrent, isLoading } from '../../state/selectors';
 import './index.css';
 
-interface PokemonCompareProps extends RouteComponentProps<{ aId: string; bId: string }> {}
+export interface PokemonCompareProps
+  extends RouteComponentProps<{ aId: string; bId: string }> {}
 
 export const notFoundMessage = (
   <div className="pokemon-not-found">Pokemon not found ;_;</div>
@@ -73,7 +74,13 @@ export function candidateShouldBeLoaded(
     !compared[f] || compared[f]!.id !== id;
 }
 
-export function PokemonCompare({ history, match: { params } }: PokemonCompareProps) {
+/**
+ * TODO: Working with route-data
+ */
+export function PokemonCompare({
+  history,
+  match: { params },
+}: PokemonCompareProps) {
   const aId = parseInt(params.aId, 10);
   const bId = parseInt(params.bId, 10);
   const compared = useSelector(compareCurrent);

@@ -83,6 +83,9 @@ export function getPage(dispatch: Dispatch, page: number) {
   };
 }
 
+/**
+ * TODO: Working with route-data
+ */
 export function PokemonList() {
   const showLoader = useSelector(isLoading);
   const list = useSelector(pokemonList);

@@ -5,11 +5,11 @@ import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router';
 import { Header } from '../../components/header';
 import { Loader } from '../../components/loader';
+import { PokemonPage } from '../../pages/Pokemon';
 import { isLoading } from '../../state/selectors';
 import { withTitle } from '../../wrappers/head';
 import { ErrorBoundary } from '../ErrorBoundary';
-import { Pokemon } from '../Pokemon';
-import { PokemonCompare } from '../PokemonCompare';
+import { PokemonCompare, PokemonCompareProps } from '../PokemonCompare';
 import { PokemonList } from '../PokemonList';
 import './index.css';
 
@@ -26,17 +26,15 @@ export function App() {
           <Route
             path="/pokemon"
             exact
-            component={withTitle('All Pokemons', PokemonList)}
+            component={withTitle('All Pokemons')(PokemonList)}
           />
-          <Route
-            path="/pokemon/:id"
-            exact
-            component={withTitle('PokemonDetails', Pokemon)}
-          />
+          <Route path="/pokemon/:id" exact component={PokemonPage} />
           <Route
             path="/pokemon/compare/:aId/:bId"
             exact
-            component={withTitle('Pokemon Comparison', PokemonCompare)}
+            component={withTitle<PokemonCompareProps>('Pokemon Comparison')(
+              PokemonCompare
+            )}
           />
         </Switch>
         {showLoader ? <Loader /> : null}
