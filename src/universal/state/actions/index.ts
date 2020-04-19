@@ -1,5 +1,6 @@
 export * from './loader';
 export * from './pokemon';
+export * from './pokemon-compare';
 import { createAction } from 'redux-actions';
 import { strEnum } from '../../../types';
 

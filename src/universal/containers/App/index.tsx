@@ -9,9 +9,9 @@ import { PokemonPage } from '../../pages/Pokemon';
 import { isLoading } from '../../state/selectors';
 import { withTitle } from '../../wrappers/head';
 import { ErrorBoundary } from '../ErrorBoundary';
-import { PokemonCompare, PokemonCompareProps } from '../PokemonCompare';
 import { PokemonList } from '../PokemonList';
 import './index.css';
+import { PokemonComparePage } from '../../pages/PokemonCompare';
 
 export function App() {
   const showLoader = useSelector(isLoading);
@@ -32,9 +32,7 @@ export function App() {
           <Route
             path="/pokemon/compare/:aId/:bId"
             exact
-            component={withTitle<PokemonCompareProps>('Pokemon Comparison')(
-              PokemonCompare
-            )}
+            component={PokemonComparePage}
           />
         </Switch>
         {showLoader ? <Loader /> : null}
