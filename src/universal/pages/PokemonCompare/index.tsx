@@ -28,6 +28,45 @@ export interface PokemonCompareProps
 
 export type ValidField = keyof State['pokemonCompare']['current'];
 
+export function PokemonComparePage({
+  match: {
+    params: { aId, bId },
+  },
+}: PokemonCompareProps) {
+  const pokemonAId = parseInt(aId, 10);
+  const pokemonBId = parseInt(bId, 10);
+  const dispatch = useDispatch();
+  const currentCompare = useSelector(compareCurrent);
+
+  return pipe(
+    PokemonCompareContent,
+    withTitle('Pokemon Compare'),
+    withRouteData(
+      dataGetter(pokemonAId, pokemonBId),
+      getActionDispatcher(dispatch, pokemonAId, pokemonBId, currentCompare)
+    )
+  );
+}
+
+function PokemonCompareContent({ a, b }: State['pokemonCompare']['current']) {
+  const history = useHistory();
+
+  return (
+    <div className="pokemon-compare">
+      <div className="pokemon-compare-items">
+        {[a!, b!].map(pokemon => (
+          <PokemonDetails key={pokemon.id} k={pokemon.id} pokemon={pokemon} />
+        ))}
+      </div>
+      <div className="pokemon-compare-controls">
+        <ButtonsContainer>
+          <Button onClick={() => history.push('/pokemon')}>Go back</Button>
+        </ButtonsContainer>
+      </div>
+    </div>
+  );
+}
+
 export function dataGetter(aId: number, bId: number) {
   return function getData() {
     const currentCompare = useSelector(compareCurrent);
@@ -97,43 +136,4 @@ function get(dispatch: Dispatch, field: ValidField, id: Pokemon['id']) {
       }
     );
   });
-}
-
-function PokemonCompareContent({ a, b }: State['pokemonCompare']['current']) {
-  const history = useHistory();
-
-  return (
-    <div className="pokemon-compare">
-      <div className="pokemon-compare-items">
-        {[a!, b!].map(pokemon => (
-          <PokemonDetails key={pokemon.id} k={pokemon.id} pokemon={pokemon} />
-        ))}
-      </div>
-      <div className="pokemon-compare-controls">
-        <ButtonsContainer>
-          <Button onClick={() => history.push('/pokemon')}>Go back</Button>
-        </ButtonsContainer>
-      </div>
-    </div>
-  );
-}
-
-export function PokemonComparePage({
-  match: {
-    params: { aId, bId },
-  },
-}: PokemonCompareProps) {
-  const pokemonAId = parseInt(aId, 10);
-  const pokemonBId = parseInt(bId, 10);
-  const dispatch = useDispatch();
-  const currentCompare = useSelector(compareCurrent);
-
-  return pipe(
-    PokemonCompareContent,
-    withTitle('Pokemon Compare'),
-    withRouteData(
-      dataGetter(pokemonAId, pokemonBId),
-      getActionDispatcher(dispatch, pokemonAId, pokemonBId, currentCompare)
-    )
-  );
 }

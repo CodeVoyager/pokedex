@@ -26,63 +26,6 @@ import {
 } from '../../state/selectors';
 import './index.css';
 
-export function pushToCompare(p: PokemonTileItem) {
-  const dispatch = useDispatch();
-  return () => {
-    dispatch(pushPokemonCompareCandidateAction(p));
-  };
-}
-export function renderPokemons(ps: ReturnType<typeof pokemonList>) {
-  return pipe(
-    ps,
-    fromNullable,
-    optionFold(
-      () => null,
-      ps => {
-        const pokemons = ps.map(({ name, url }) => {
-          const id = pipe(
-            url.split('/'),
-            ns => fromNullable(ns[ns.length - 2]),
-            optionFold(() => -1, s => parseInt(s, 10))
-          );
-
-          return { name, id };
-        });
-
-        return (
-          <PokemonTilesContainer
-            onCompareClick={pushToCompare}
-            pokemons={pokemons}
-          />
-        );
-      }
-    )
-  );
-}
-
-export function getPage(dispatch: Dispatch, page: number) {
-  return () => {
-    return PokemonService.list(page)().then(ps => {
-      pipe(
-        ps,
-        fold<Error, PokemonResponse, Action>(
-          e => {
-            return setErrorAction(e);
-          },
-          ps => {
-            return setPokemonListAction(ps.results);
-          }
-        ),
-        action => {
-          dispatch(action);
-          dispatch(setPokemonListPageAction(page));
-          dispatch(stopLoadingAction());
-        }
-      );
-    });
-  };
-}
-
 /**
  * TODO: Working with route-data
  */
@@ -128,4 +71,62 @@ export function PokemonList() {
       )}
     </div>
   );
+}
+
+export function renderPokemons(ps: ReturnType<typeof pokemonList>) {
+  return pipe(
+    ps,
+    fromNullable,
+    optionFold(
+      () => null,
+      ps => {
+        const pokemons = ps.map(({ name, url }) => {
+          const id = pipe(
+            url.split('/'),
+            ns => fromNullable(ns[ns.length - 2]),
+            optionFold(() => -1, s => parseInt(s, 10))
+          );
+
+          return { name, id };
+        });
+
+        return (
+          <PokemonTilesContainer
+            onCompareClick={pushToCompare}
+            pokemons={pokemons}
+          />
+        );
+      }
+    )
+  );
+}
+
+export function pushToCompare(p: PokemonTileItem) {
+  const dispatch = useDispatch();
+  return () => {
+    dispatch(pushPokemonCompareCandidateAction(p));
+  };
+}
+
+export function getPage(dispatch: Dispatch, page: number) {
+  return () => {
+    return PokemonService.list(page)().then(ps => {
+      pipe(
+        ps,
+        fold<Error, PokemonResponse, Action>(
+          e => {
+            return setErrorAction(e);
+          },
+          ps => {
+            return setPokemonListAction(ps.results);
+          }
+        ),
+        action => {
+          dispatch(action);
+          dispatch(setPokemonListPageAction(page));
+          dispatch(stopLoadingAction());
+        }
+      );
+    });
+  };
 }

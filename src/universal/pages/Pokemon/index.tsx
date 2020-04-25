@@ -31,6 +31,38 @@ export interface PokemonContentProps {
 
 interface PokemonProps extends RouteComponentProps<PokemonRouteParams> {}
 
+export function PokemonPage({
+  match: {
+    params: { id },
+  },
+  history,
+}: PokemonProps) {
+  const pokemonId = parseInt(id, 10);
+  const dispatch = useDispatch();
+
+  return pipe(
+    PokemonPageContent,
+    withTitle('Pokemon'),
+    withRouteData(
+      dataGetter(pokemonId, history),
+      getActionDispatcher(dispatch, pokemonId)
+    )
+  );
+}
+
+export function PokemonPageContent({ pokemon, history }: PokemonContentProps) {
+  return (
+    <div className="pokemon">
+      <PokemonDetails pokemon={pokemon} />
+      <div className="pokemon-list-controls">
+        <ButtonsContainer>
+          <Button onClick={() => history.push('/pokemon')}>Go back</Button>
+        </ButtonsContainer>
+      </div>
+    </div>
+  );
+}
+
 export function dataGetter(id: number, history: PokemonProps['history']) {
   return () => {
     const pokemon = useSelector(pokemonDetails);
@@ -65,36 +97,4 @@ function getActionDispatcher(dispatch: Dispatch, id: ApiPokemon['id']) {
       );
     });
   };
-}
-
-export function PokemonPageContent({ pokemon, history }: PokemonContentProps) {
-  return (
-    <div className="pokemon">
-      <PokemonDetails pokemon={pokemon} />
-      <div className="pokemon-list-controls">
-        <ButtonsContainer>
-          <Button onClick={() => history.push('/pokemon')}>Go back</Button>
-        </ButtonsContainer>
-      </div>
-    </div>
-  );
-}
-
-export function PokemonPage({
-  match: {
-    params: { id },
-  },
-  history,
-}: PokemonProps) {
-  const pokemonId = parseInt(id, 10);
-  const dispatch = useDispatch();
-
-  return pipe(
-    PokemonPageContent,
-    withTitle('Pokemon'),
-    withRouteData(
-      dataGetter(pokemonId, history),
-      getActionDispatcher(dispatch, pokemonId)
-    )
-  );
 }

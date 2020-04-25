@@ -7,45 +7,27 @@ import {
   PokemonType,
 } from '../../../types/pokeapi';
 
-const API_ENDPOINT = 'https://pokeapi.co/api/v2';
-
-export const ITEMS_PER_PAGE = 20;
-
-export interface PokeAPIService<U extends { id: number }> {
+export interface BaseItem {
+  id: number;
+}
+export interface PokeAPIService<U extends BaseItem> {
   list: (page: number) => TaskEither<Error, PokemonResponse>;
   get: (id: U['id']) => TaskEither<Error, U>;
 }
 
+const API_ENDPOINT = 'https://pokeapi.co/api/v2';
 const cache: { [x: string]: { [y: string]: any } } = {};
+export const ITEMS_PER_PAGE = 20;
 
-function getFromCache<T>(name: string, id: number | string): T | null {
-  if (!cache[name]) {
-    cache[name] = {};
-  }
-  if (cache[name][id]) {
-    return cache[name][id];
-  }
+export const PokemonService = ApiRequestFactory<Pokemon>('pokemon');
+export const PokemonColorService = ApiRequestFactory<PokemonColor>(
+  'pokemon-color'
+);
+export const PokemonRequestService = ApiRequestFactory<PokemonType>(
+  'pokemon-type'
+);
 
-  return null;
-}
-
-function setInCache<T>(name: string, id: number | string, value: T): void {
-  if (!cache[name]) {
-    cache[name] = {};
-  }
-
-  cache[name][id] = value;
-}
-
-function setInCacheMiddleware<T>(name: string) {
-  return (id: number | string) => (value: T) => {
-    setInCache(name, id, value);
-
-    return value;
-  };
-}
-
-function ApiRequestFactory<T extends { id: number }>(
+function ApiRequestFactory<T extends BaseItem>(
   endpoint: string
 ): PokeAPIService<T> {
   return {
@@ -97,10 +79,29 @@ function ApiRequestFactory<T extends { id: number }>(
   };
 }
 
-export const PokemonService = ApiRequestFactory<Pokemon>('pokemon');
-export const PokemonColorService = ApiRequestFactory<PokemonColor>(
-  'pokemon-color'
-);
-export const PokemonRequestService = ApiRequestFactory<PokemonType>(
-  'pokemon-type'
-);
+function getFromCache<T>(name: string, id: number | string): T | null {
+  if (!cache[name]) {
+    cache[name] = {};
+  }
+  if (cache[name][id]) {
+    return cache[name][id];
+  }
+
+  return null;
+}
+
+function setInCache<T>(name: string, id: number | string, value: T): void {
+  if (!cache[name]) {
+    cache[name] = {};
+  }
+
+  cache[name][id] = value;
+}
+
+function setInCacheMiddleware<T>(name: string) {
+  return (id: number | string) => (value: T) => {
+    setInCache(name, id, value);
+
+    return value;
+  };
+}
