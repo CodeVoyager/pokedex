@@ -54,11 +54,15 @@ describe('Component', () => {
         id: 1,
         name: 'POKEMON',
       };
-      const component = shallow(<PokemonCompareMini a={pokemon} b={pokemon} />);
+      const pokemon2 = {
+        ...pokemon,
+        id: 2,
+      };
+      const component = shallow(<PokemonCompareMini a={pokemon} b={pokemon2} />);
 
       expect(component.find('.pokemon-compare-go-to').length).toBe(1);
       expect(component.find('.pokemon-compare-go-to').get(0).props.to).toEqual(
-        '/pokemon/compare/1/1'
+        '/pokemon/compare/1/2'
       );
     });
   });

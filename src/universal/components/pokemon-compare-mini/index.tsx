@@ -20,7 +20,7 @@ export function renderItem(el?: PokemonTileItem) {
     fold(
       () => null,
       el => (
-        <div className="pokemon-compare-mini-image">
+        <div key={el.id} className="pokemon-compare-mini-image">
           <img src={getImageUrlForId(el.id)} alt="pokemon-image" />
         </div>
       )
