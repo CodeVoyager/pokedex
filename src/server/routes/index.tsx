@@ -1,13 +1,14 @@
 import { Router } from 'express';
-import { Either, fold } from 'fp-ts/lib/Either';
+import { fold } from 'fp-ts/lib/Either';
 import { pipe } from 'fp-ts/lib/pipeable';
 import React from 'react';
-import { Pokemon, PokemonResponse } from '../../types/pokeapi';
-import { PokemonTileItem } from '../../universal/components/pokemon-tile';
+import { PokemonResponse } from '../../types/pokeapi';
 import { App } from '../../universal/containers/App';
+import { getActionDispatcher as pokemonDetailsActionDispatcher } from '../../universal/pages/Pokemon';
+import { getActionDispatcher as pokemonCompareActionDispatcher } from '../../universal/pages/PokemonCompare';
 import { PokemonService } from '../../universal/service/pokeapi';
 import { State } from '../../universal/state/store';
-import { extendEmptyState, renderPage } from '../utils/react';
+import { extendEmptyState, getEmptyState, renderPage } from '../utils/react';
 
 const indexRouter = Router();
 
@@ -40,69 +41,31 @@ indexRouter.get('/pokemon', (req, res) => {
   });
 });
 indexRouter.get('/pokemon/:id', (req, res) => {
-  const id = parseInt(req.params.id, 10);
+  const dispatch = (x: any) => x;
+  const actionDispatcher = pokemonDetailsActionDispatcher(
+    dispatch,
+    parseInt(req.params.id, 10)
+  );
 
-  PokemonService.get(id)().then(p => {
-    pipe(
-      p,
-      fold<Error, Pokemon, State>(
-        e => {
-          return extendEmptyState({
-            error: e,
-          });
-        },
-        p => {
-          return extendEmptyState({
-            pokemon: {
-              page: 0,
-              current: p,
-            },
-          });
-        }
-      ),
-      state => {
-        res.send(renderPage(req, state, <App />));
-      }
-    );
+  actionDispatcher().then(action => {
+    res.send(renderPage(req, getEmptyState(), <App />, [action]));
   });
 });
 indexRouter.get('/pokemon/compare/:aId/:bId', async (req, res) => {
   const {
     params: { aId, bId },
   } = req;
-  const flatten = (x: Either<Error, Pokemon>) =>
-    pipe(
-      x,
-      fold<Error, Pokemon, Pokemon | undefined>(() => undefined, p => p)
-    );
-  const toPokemonTileItem = ({ id, name }: Pokemon): PokemonTileItem => ({
-    id: id,
-    name,
-  });
-  const [a, b] = await Promise.all(
-    [aId, bId]
-      .map(x => parseInt(x, 10))
-      .map(PokemonService.get)
-      .map(f => f())
-  ).then<ReturnType<typeof flatten>[], never>(xs => xs.map(flatten));
-  res.send(
-    renderPage(
-      req,
-      extendEmptyState({
-        pokemonCompare: {
-          candidates: {
-            a: a ? toPokemonTileItem(a) : undefined,
-            b: b ? toPokemonTileItem(b) : undefined,
-          },
-          current: {
-            a: a,
-            b: b,
-          },
-        },
-      }),
-      <App />
-    )
+  const dispatch = (x: any) => x;
+  const actionDispatcher = pokemonCompareActionDispatcher(
+    dispatch,
+    parseInt(aId, 10),
+    parseInt(bId, 10),
+    {}
   );
+
+  actionDispatcher().then(actions => {
+    res.send(renderPage(req, getEmptyState(), <App />, actions));
+  });
 });
 
 export { indexRouter };

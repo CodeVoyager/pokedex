@@ -28,8 +28,12 @@ export const clearPokemonCompareCurrentAction = createAction<void>(
   PokemonCompareReduxActions.CLEAR_POKEMON_COMPARE_CURRENT
 );
 
+export type SetPokemonCompareAction = ReturnType<
+  typeof setPokemonCompareCurrentAction
+>;
+
 export type PokemonCompareActions =
   | ReturnType<typeof pushPokemonCompareCandidateAction>
-  | ReturnType<typeof setPokemonCompareCurrentAction>
+  | SetPokemonCompareAction
   | ReturnType<typeof clearPokemonCompareCandidatesAction>
   | ReturnType<typeof clearPokemonCompareCurrentAction>;

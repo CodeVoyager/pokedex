@@ -15,6 +15,8 @@ import {
   setPokemonCompareCurrentAction,
   startLoadingAction,
   stopLoadingAction,
+  SetPokemonCompareAction,
+  SetErrorAction,
 } from '../../state/actions';
 import { compareCurrent } from '../../state/selectors';
 import { State } from '../../state/store';
@@ -92,7 +94,7 @@ export function getActionDispatcher(
 ) {
   return function actionDispatcher() {
     const { a, b } = currentCompare;
-    const promises = [];
+    const promises: Promise<SetPokemonCompareAction | SetErrorAction>[] = [];
 
     if (candidateShouldBeLoaded(a, aId)) {
       promises.push(get(dispatch, 'a', aId));
@@ -117,13 +119,13 @@ function get(dispatch: Dispatch, field: ValidField, id: Pokemon['id']) {
   dispatch(startLoadingAction());
 
   return PokemonService.get(id)().then(p => {
-    pipe(
+    return pipe(
       p,
-      fold<Error, Pokemon, Action>(
+      fold<Error, Pokemon, SetPokemonCompareAction | SetErrorAction>(
         e => {
           return setErrorAction(e);
         },
-        p => {
+        (p: Pokemon) => {
           return setPokemonCompareCurrentAction({
             field,
             item: p,
@@ -133,6 +135,8 @@ function get(dispatch: Dispatch, field: ValidField, id: Pokemon['id']) {
       action => {
         dispatch(action);
         dispatch(stopLoadingAction());
+
+        return action;
       }
     );
   });

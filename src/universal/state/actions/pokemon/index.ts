@@ -18,7 +18,9 @@ export const setPokemonAction = createAction<Pokemon>(
   PokemonReduxActions.SET_POKEMON
 );
 
+export type SetPokemonAction = ReturnType<typeof setPokemonAction>;
+
 export type PokemonActions =
   | ReturnType<typeof setPokemonListPageAction>
   | ReturnType<typeof setPokemonListAction>
-  | ReturnType<typeof setPokemonAction>;
+  | SetPokemonAction;

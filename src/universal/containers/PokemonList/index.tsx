@@ -84,7 +84,10 @@ export function renderPokemons(ps: ReturnType<typeof pokemonList>) {
           const id = pipe(
             url.split('/'),
             ns => fromNullable(ns[ns.length - 2]),
-            optionFold(() => -1, s => parseInt(s, 10))
+            optionFold(
+              () => -1,
+              s => parseInt(s, 10)
+            )
           );
 
           return { name, id };

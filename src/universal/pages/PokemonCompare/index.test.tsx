@@ -149,7 +149,10 @@ describe('PokemonCompare', () => {
       expect(dataGetter(0, 1)()).toEqual(none);
     });
     it('should return Some on data complete', () => {
-      const pickData = fold(() => undefined, x => x);
+      const pickData = fold(
+        () => undefined,
+        x => x
+      );
       const data = dataGetter(0, 1);
       const expectedData = {
         a: pokemonA,
@@ -221,17 +224,19 @@ describe('PokemonCompare', () => {
       const payload = { field: 'a', item: pokemonB };
       const payload2 = { field: 'b', item: pokemonB };
 
-      Promise.all([actionDispatcher(), actionDispatcher2()]).then(() => {
-        expect(dispatch).toHaveBeenCalledWith({
-          type: 'SET',
-          payload,
-        });
-        expect(dispatch).toHaveBeenCalledWith({
-          type: 'SET',
-          payload: payload2,
-        });
-        next();
-      });
+      Promise.all([actionDispatcher(), actionDispatcher2()]).then(
+        ([result, result2]) => {
+          expect(result[0]).toEqual({
+            type: 'SET',
+            payload,
+          });
+          expect(result2[0]).toEqual({
+            type: 'SET',
+            payload: payload2,
+          });
+          next();
+        }
+      );
     });
     it('should dispatch compare set action on succesful load', next => {
       const actionDispatcher = getActionDispatcher(
@@ -242,8 +247,8 @@ describe('PokemonCompare', () => {
       );
       const payload = { field: 'b', item: pokemonB };
 
-      actionDispatcher().then(() => {
-        expect(dispatch).toHaveBeenCalledWith({
+      actionDispatcher().then(([action]) => {
+        expect(action).toEqual({
           type: 'SET',
           payload,
         });
@@ -258,8 +263,8 @@ describe('PokemonCompare', () => {
         currentCompare
       );
 
-      actionDispatcher().then(() => {
-        expect(dispatch).toHaveBeenCalledWith({
+      actionDispatcher().then(([action]) => {
+        expect(action).toEqual({
           type: 'ERROR',
         });
         next();

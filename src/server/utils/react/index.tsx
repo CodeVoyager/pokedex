@@ -4,8 +4,12 @@ import ReactDOMServer from 'react-dom/server';
 import { Helmet } from 'react-helmet';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
+import { Store } from 'redux';
+import { AllActions, SetErrorAction } from '../../../universal/state/actions';
 import { configureStore, State } from '../../../universal/state/store';
 import { pageTemplate } from '../../template';
+
+export type BackendActions = Exclude<AllActions, SetErrorAction>;
 
 export function getEmptyState(): State {
   return {
@@ -32,20 +36,29 @@ export function extendEmptyState(partialState: Partial<State>): State {
 
 export function wrapPageElement(
   location: string,
-  state: State,
+  store: Store<State, BackendActions>,
   page: JSX.Element
 ) {
   return (
     <StaticRouter location={location}>
-      <Provider store={configureStore(state)}>{page}</Provider>
+      <Provider store={store}>{page}</Provider>
     </StaticRouter>
   );
 }
 
-export function renderPage(req: Request, state: State, page: JSX.Element) {
+export function renderPage(
+  req: Request,
+  state: State,
+  page: JSX.Element,
+  actions: AllActions[] = []
+) {
+  const store = configureStore(state);
+
+  actions.forEach(action => store.dispatch(action as any));
+
   return pageTemplate(
-    renderReact(wrapPageElement(req.path, state, page)),
-    state,
+    renderReact(wrapPageElement(req.path, store, page)),
+    store.getState(),
     process.env.NODE_ENV
   );
 }

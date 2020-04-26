@@ -17,7 +17,7 @@ export interface PokemonResponse {
   count: number;
   next: string;
   previous?: null;
-  results?: (NamedAPIResource)[] | null;
+  results?: NamedAPIResource[] | null;
 }
 
 export * from './pokemon';
