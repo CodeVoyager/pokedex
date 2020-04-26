@@ -3,7 +3,7 @@ import { none, some } from 'fp-ts/lib/Option';
 import { pipe } from 'fp-ts/lib/pipeable';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, useHistory } from 'react-router';
 import { Dispatch } from 'redux';
 import { Pokemon as ApiPokemon, Pokemon } from '../../../types/pokeapi';
 import { Button } from '../../components/button';
@@ -11,13 +11,13 @@ import { ButtonsContainer } from '../../components/buttons-container';
 import { PokemonDetails } from '../../components/pokemon-details';
 import { PokemonService } from '../../service/pokeapi';
 import {
+  AllActions,
   setErrorAction,
   SetErrorAction,
   setPokemonAction,
   SetPokemonAction,
   startLoadingAction,
   stopLoadingAction,
-  AllActions,
 } from '../../state/actions';
 import { pokemon as pokemonDetails } from '../../state/selectors';
 import { withTitle } from '../../wrappers/head';
@@ -29,7 +29,6 @@ export interface PokemonRouteParams {
 
 export interface PokemonContentProps {
   pokemon: Pokemon;
-  history: PokemonProps['history'];
 }
 
 interface PokemonProps extends RouteComponentProps<PokemonRouteParams> {}
@@ -38,7 +37,6 @@ export function PokemonPage({
   match: {
     params: { id },
   },
-  history,
 }: PokemonProps) {
   const pokemonId = parseInt(id, 10);
   const dispatch = useDispatch();
@@ -47,13 +45,15 @@ export function PokemonPage({
     PokemonPageContent,
     withTitle('Pokemon'),
     withRouteData(
-      dataGetter(pokemonId, history),
+      dataGetter(pokemonId),
       getActionDispatcher(dispatch, pokemonId)
     )
   );
 }
 
-export function PokemonPageContent({ pokemon, history }: PokemonContentProps) {
+export function PokemonPageContent({ pokemon }: PokemonContentProps) {
+  const history = useHistory();
+
   return (
     <div className="pokemon">
       <PokemonDetails pokemon={pokemon} />
@@ -66,7 +66,7 @@ export function PokemonPageContent({ pokemon, history }: PokemonContentProps) {
   );
 }
 
-export function dataGetter(id: number, history: PokemonProps['history']) {
+export function dataGetter(id: number) {
   return () => {
     const pokemon = useSelector(pokemonDetails);
 
@@ -74,7 +74,7 @@ export function dataGetter(id: number, history: PokemonProps['history']) {
       return none;
     }
 
-    return some({ pokemon, history });
+    return some({ pokemon });
   };
 }
 
