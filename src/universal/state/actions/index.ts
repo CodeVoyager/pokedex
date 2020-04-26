@@ -9,7 +9,7 @@ import { PokemonCompareActions } from './pokemon-compare';
 
 export const AppReduxActions = strEnum(['SET_ERROR']);
 
-export const setErrorAction = createAction<Error>(AppReduxActions.SET_ERROR);
+export const setErrorAction = createAction<string>(AppReduxActions.SET_ERROR);
 export type SetErrorAction = ReturnType<typeof setErrorAction>;
 
 export type AllActions =

@@ -85,24 +85,26 @@ export function getActionDispatcher(
   return function actionDispatcher() {
     dispatch(startLoadingAction());
 
-    return PokemonService.get(id)().then(p => {
-      return pipe(
-        p,
-        foldEither<Error, ApiPokemon, SetErrorAction | SetPokemonAction>(
-          e => {
-            return setErrorAction(e);
-          },
-          p => {
-            return setPokemonAction(p);
-          }
-        ),
-        action => {
-          dispatch(action);
-          dispatch(stopLoadingAction());
+    return PokemonService.get(id)()
+      .then(p => {
+        return pipe(
+          p,
+          foldEither<Error, ApiPokemon, SetErrorAction | SetPokemonAction>(
+            e => {
+              return setErrorAction(e.message);
+            },
+            p => {
+              return setPokemonAction(p);
+            }
+          ),
+          action => {
+            dispatch(action);
+            dispatch(stopLoadingAction());
 
-          return action;
-        }
-      );
-    });
+            return action;
+          }
+        );
+      })
+      .then(action => [action]);
   };
 }

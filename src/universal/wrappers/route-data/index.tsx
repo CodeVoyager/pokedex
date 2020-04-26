@@ -1,13 +1,14 @@
-import { Option, fold, isNone } from 'fp-ts/lib/Option';
+import { fold, isNone, Option } from 'fp-ts/lib/Option';
 import React from 'react';
 import { Loader } from '../../components/loader';
+import { AllActions } from '../../state/actions';
 
 type DataGetter<T> = () => Option<T>;
 type ComponentWithData<T> = React.FC<T> | React.ComponentClass<T>;
 
 export function withRouteData<T>(
   dataGetter: DataGetter<T>,
-  actionDispatcher: () => any
+  actionDispatcher: () => Promise<AllActions[]>
 ) {
   return function ComponentWithData(Component: ComponentWithData<T>) {
     const { useEffect, useCallback } = React;

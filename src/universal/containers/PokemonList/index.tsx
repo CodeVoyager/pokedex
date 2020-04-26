@@ -118,7 +118,7 @@ export function getPage(dispatch: Dispatch, page: number) {
         ps,
         fold<Error, PokemonResponse, Action>(
           e => {
-            return setErrorAction(e);
+            return setErrorAction(e.message);
           },
           ps => {
             return setPokemonListAction(ps.results);

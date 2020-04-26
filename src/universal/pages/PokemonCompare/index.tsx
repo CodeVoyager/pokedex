@@ -128,7 +128,7 @@ function get(
       p,
       fold<Error, Pokemon, SetPokemonCompareAction | SetErrorAction>(
         e => {
-          return setErrorAction(e);
+          return setErrorAction(e.message);
         },
         (p: Pokemon) => {
           return setPokemonCompareCurrentAction({
