@@ -53,13 +53,11 @@ indexRouter.get('/pokemon/:id', (req, res) => {
     parseInt(req.params.id, 10)
   );
 
-  actionDispatcher().then(action => {
-    dispatch(action);
-
+  actionDispatcher().then(() => {
     res.send(renderPage(req, getEmptyState(), <App />, getActions()));
   });
 });
-indexRouter.get('/pokemon/compare/:aId/:bId', async (req, res) => {
+indexRouter.get('/pokemon/compare/:aId/:bId', (req, res) => {
   const {
     params: { aId, bId },
   } = req;
@@ -72,8 +70,7 @@ indexRouter.get('/pokemon/compare/:aId/:bId', async (req, res) => {
     {}
   );
 
-  actionDispatcher().then(actions => {
-    actions.forEach(dispatch);
+  actionDispatcher().then(() => {
     res.send(renderPage(req, getEmptyState(), <App />, getActions()));
   });
 });
