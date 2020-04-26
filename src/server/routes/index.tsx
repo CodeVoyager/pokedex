@@ -21,7 +21,7 @@ const indexRouter = Router();
 indexRouter.get('/', (_, res) => {
   res.redirect('/pokemon');
 });
-indexRouter.get('/pokemon', (req, res) => {
+indexRouter.get('/pokemon', ({ path }, res) => {
   PokemonService.list(0)().then(ps => {
     pipe(
       ps,
@@ -41,37 +41,34 @@ indexRouter.get('/pokemon', (req, res) => {
         }
       ),
       state => {
-        res.send(renderPage(req, state, <App />));
+        res.send(renderPage(path, state, <App />));
       }
     );
   });
 });
-indexRouter.get('/pokemon/:id', (req, res) => {
+indexRouter.get('/pokemon/:id', ({ path, params: { id } }, res) => {
   const { dispatch, getActions } = getActionCollector<AllActions>();
-  const getPokemon = pokemonDetailsActionDispatcher(
-    dispatch,
-    parseInt(req.params.id, 10)
-  );
+  const getPokemon = pokemonDetailsActionDispatcher(dispatch, parseInt(id, 10));
 
   getPokemon().then(() => {
-    res.send(renderPage(req, getEmptyState(), <App />, getActions()));
+    res.send(renderPage(path, getEmptyState(), <App />, getActions()));
   });
 });
-indexRouter.get('/pokemon/compare/:aId/:bId', (req, res) => {
-  const {
-    params: { aId, bId },
-  } = req;
-  const { dispatch, getActions } = getActionCollector<AllActions>();
-  const getPokemons = pokemonCompareActionDispatcher(
-    dispatch,
-    parseInt(aId, 10),
-    parseInt(bId, 10),
-    {}
-  );
+indexRouter.get(
+  '/pokemon/compare/:aId/:bId',
+  ({ params: { aId, bId }, path }, res) => {
+    const { dispatch, getActions } = getActionCollector<AllActions>();
+    const getPokemons = pokemonCompareActionDispatcher(
+      dispatch,
+      parseInt(aId, 10),
+      parseInt(bId, 10),
+      {}
+    );
 
-  getPokemons().then(() => {
-    res.send(renderPage(req, getEmptyState(), <App />, getActions()));
-  });
-});
+    getPokemons().then(() => {
+      res.send(renderPage(path, getEmptyState(), <App />, getActions()));
+    });
+  }
+);
 
 export { indexRouter };

@@ -47,7 +47,7 @@ export function wrapPageElement(
 }
 
 export function renderPage(
-  req: Request,
+  path: string,
   state: State,
   page: JSX.Element,
   actions: AllActions[] = []
@@ -57,7 +57,7 @@ export function renderPage(
   actions.forEach(action => store.dispatch(action as any));
 
   return pageTemplate(
-    renderReact(wrapPageElement(req.path, store, page)),
+    renderReact(wrapPageElement(path, store, page)),
     store.getState(),
     process.env.NODE_ENV
   );

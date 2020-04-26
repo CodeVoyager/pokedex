@@ -1,13 +1,13 @@
+import { shallow } from 'enzyme';
+import React from 'react';
 import {
   extendEmptyState,
+  getActionCollector,
   getEmptyState,
   renderPage,
   renderReact,
   wrapPageElement,
-  getActionCollector
 } from '.';
-import { shallow } from 'enzyme';
-import React from 'react';
 
 interface Props {
   children: null | string | React.ReactChild | React.ReactChild[];
@@ -76,11 +76,7 @@ describe('React server utils', () => {
   });
   describe('renderPage()', () => {
     it('should render valid page', () => {
-      const result = renderPage(
-        { path: '/' } as any,
-        { foo: 'bar' } as any,
-        <div>CONTENT</div>
-      );
+      const result = renderPage('/', {} as any, <div>CONTENT</div>);
 
       expect(result).toMatchInlineSnapshot(`
         "
@@ -129,11 +125,7 @@ describe('React server utils', () => {
   describe('wrapPageElement()', () => {
     it('should render valid page', () => {
       const result = shallow(
-        wrapPageElement(
-          { path: '/' } as any,
-          { foo: 'bar' } as any,
-          <div>CONTENT</div>
-        )
+        wrapPageElement('/', {} as any, <div>CONTENT</div>)
       );
 
       expect(result).toMatchInlineSnapshot(`
@@ -141,11 +133,7 @@ describe('React server utils', () => {
           className="static-router"
         >
           <Provider
-            store={
-              Object {
-                "foo": "bar",
-              }
-            }
+            store={Object {}}
           >
             <div>
               CONTENT
