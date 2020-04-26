@@ -48,12 +48,12 @@ indexRouter.get('/pokemon', (req, res) => {
 });
 indexRouter.get('/pokemon/:id', (req, res) => {
   const { dispatch, getActions } = getActionCollector<AllActions>();
-  const actionDispatcher = pokemonDetailsActionDispatcher(
+  const getPokemon = pokemonDetailsActionDispatcher(
     dispatch,
     parseInt(req.params.id, 10)
   );
 
-  actionDispatcher().then(() => {
+  getPokemon().then(() => {
     res.send(renderPage(req, getEmptyState(), <App />, getActions()));
   });
 });
@@ -62,15 +62,14 @@ indexRouter.get('/pokemon/compare/:aId/:bId', (req, res) => {
     params: { aId, bId },
   } = req;
   const { dispatch, getActions } = getActionCollector<AllActions>();
-
-  const actionDispatcher = pokemonCompareActionDispatcher(
+  const getPokemons = pokemonCompareActionDispatcher(
     dispatch,
     parseInt(aId, 10),
     parseInt(bId, 10),
     {}
   );
 
-  actionDispatcher().then(() => {
+  getPokemons().then(() => {
     res.send(renderPage(req, getEmptyState(), <App />, getActions()));
   });
 });
