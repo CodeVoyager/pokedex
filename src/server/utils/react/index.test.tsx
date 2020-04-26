@@ -4,6 +4,7 @@ import {
   renderPage,
   renderReact,
   wrapPageElement,
+  getActionCollector
 } from '.';
 import { shallow } from 'enzyme';
 import React from 'react';
@@ -91,7 +92,7 @@ describe('React server utils', () => {
             <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0\\">
             <meta http-equiv=\\"X-UA-Compatible\\" content=\\"ie=edge\\">
             <title data-react-helmet=\\"true\\"></title>
-            
+
             <link href=\\"https://fonts.googleapis.com/css?family=Fira+Sans&display=swap\\" rel=\\"stylesheet\\">
             <link href=\\"https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap\\" rel=\\"stylesheet\\">
         </head>
@@ -102,7 +103,7 @@ describe('React server utils', () => {
             </main>
             <script>
               window.__INITIAL_STATE__ = {\\"loader\\":{\\"count\\":0,\\"isLoading\\":false},\\"pokemon\\":{\\"page\\":0},\\"pokemonCompare\\":{\\"candidates\\":{},\\"current\\":{}}};
-              
+
             </script>
             <script src=\\"http://localhost:5005/app.js\\"></script>
         </body>
@@ -152,6 +153,26 @@ describe('React server utils', () => {
           </Provider>
         </div>
       `);
+    });
+  });
+  describe('getActionCollector()', () => {
+    it('should return object as a result', () => {
+      expect(getActionCollector()).toBeInstanceOf(Object);
+    });
+    it('should return object with dispatch method', () => {
+      expect(getActionCollector().dispatch).toBeInstanceOf(Function);
+    });
+    it('should return object with getActions method', () => {
+      expect(getActionCollector().getActions).toBeInstanceOf(Function);
+    });
+    it('should give object with methods to dispatch and retrieve dispatched actions', () => {
+      const collector = getActionCollector<{ type: 'TEST' }>();
+      const action = { type: 'TEST' as 'TEST' };
+
+      collector.dispatch(action);
+      collector.dispatch(action);
+
+      expect(collector.getActions()).toEqual([action, action]);
     });
   });
 });

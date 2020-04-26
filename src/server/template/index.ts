@@ -21,11 +21,11 @@ export const pageTemplate = (
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     ${title}
-    ${
-      (env || '').trim() === 'production'
-        ? `<link rel="stylesheet" href="/${(assets as any).app.css}">`
-        : ``
-    }
+${
+  (env || '').trim() === 'production'
+    ? `<link rel="stylesheet" href="/${(assets as any).app.css}">`
+    : ``
+}
     <link href="https://fonts.googleapis.com/css?family=Fira+Sans&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap" rel="stylesheet">
 </head>
@@ -36,11 +36,11 @@ export const pageTemplate = (
     </main>
     <script>
       window.__INITIAL_STATE__ = ${JSON.stringify(state)};
-      ${
-        (env || '').trim() === 'production'
-          ? '(window.__REACT_DEVTOOLS_GLOBAL_HOOK__ || {}).inject = function () {}'
-          : ''
-      }
+${
+  (env || '').trim() === 'production'
+    ? '(window.__REACT_DEVTOOLS_GLOBAL_HOOK__ || {}).inject = function () {}'
+    : ''
+}
     </script>
     <script src="${
       (env || '').trim() === 'production'

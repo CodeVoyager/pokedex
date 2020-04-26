@@ -17,6 +17,7 @@ import {
   stopLoadingAction,
   SetPokemonCompareAction,
   SetErrorAction,
+  AllActions,
 } from '../../state/actions';
 import { compareCurrent } from '../../state/selectors';
 import { State } from '../../state/store';
@@ -87,7 +88,7 @@ export function dataGetter(aId: number, bId: number) {
 }
 
 export function getActionDispatcher(
-  dispatch: Dispatch,
+  dispatch: Dispatch<AllActions>,
   aId: number,
   bId: number,
   currentCompare: State['pokemonCompare']['current']
@@ -115,7 +116,11 @@ export function candidateShouldBeLoaded(
   return !compared || compared!.id !== id;
 }
 
-function get(dispatch: Dispatch, field: ValidField, id: Pokemon['id']) {
+function get(
+  dispatch: Dispatch<AllActions>,
+  field: ValidField,
+  id: Pokemon['id']
+) {
   dispatch(startLoadingAction());
 
   return PokemonService.get(id)().then(p => {

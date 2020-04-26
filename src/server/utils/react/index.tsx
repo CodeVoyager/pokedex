@@ -4,7 +4,7 @@ import ReactDOMServer from 'react-dom/server';
 import { Helmet } from 'react-helmet';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
-import { Store } from 'redux';
+import { Store, Dispatch, Action } from 'redux';
 import { AllActions, SetErrorAction } from '../../../universal/state/actions';
 import { configureStore, State } from '../../../universal/state/store';
 import { pageTemplate } from '../../template';
@@ -74,5 +74,16 @@ export function renderReact(page: JSX.Element) {
     head: {
       title: helmet.title.toString(),
     },
+  };
+}
+
+export function getActionCollector<T extends Action>(actions: T[] = []) {
+  return {
+    dispatch: ((action: T) => {
+      actions.push(action);
+
+      return action;
+    }) as Dispatch<T>,
+    getActions: () => actions,
   };
 }

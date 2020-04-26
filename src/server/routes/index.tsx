@@ -7,8 +7,14 @@ import { App } from '../../universal/containers/App';
 import { getActionDispatcher as pokemonDetailsActionDispatcher } from '../../universal/pages/Pokemon';
 import { getActionDispatcher as pokemonCompareActionDispatcher } from '../../universal/pages/PokemonCompare';
 import { PokemonService } from '../../universal/service/pokeapi';
+import { AllActions } from '../../universal/state/actions';
 import { State } from '../../universal/state/store';
-import { extendEmptyState, getEmptyState, renderPage } from '../utils/react';
+import {
+  extendEmptyState,
+  getActionCollector,
+  getEmptyState,
+  renderPage,
+} from '../utils/react';
 
 const indexRouter = Router();
 
@@ -41,21 +47,24 @@ indexRouter.get('/pokemon', (req, res) => {
   });
 });
 indexRouter.get('/pokemon/:id', (req, res) => {
-  const dispatch = (x: any) => x;
+  const { dispatch, getActions } = getActionCollector<AllActions>();
   const actionDispatcher = pokemonDetailsActionDispatcher(
     dispatch,
     parseInt(req.params.id, 10)
   );
 
   actionDispatcher().then(action => {
-    res.send(renderPage(req, getEmptyState(), <App />, [action]));
+    dispatch(action);
+
+    res.send(renderPage(req, getEmptyState(), <App />, getActions()));
   });
 });
 indexRouter.get('/pokemon/compare/:aId/:bId', async (req, res) => {
   const {
     params: { aId, bId },
   } = req;
-  const dispatch = (x: any) => x;
+  const { dispatch, getActions } = getActionCollector<AllActions>();
+
   const actionDispatcher = pokemonCompareActionDispatcher(
     dispatch,
     parseInt(aId, 10),
@@ -64,7 +73,8 @@ indexRouter.get('/pokemon/compare/:aId/:bId', async (req, res) => {
   );
 
   actionDispatcher().then(actions => {
-    res.send(renderPage(req, getEmptyState(), <App />, actions));
+    actions.forEach(dispatch);
+    res.send(renderPage(req, getEmptyState(), <App />, getActions()));
   });
 });
 

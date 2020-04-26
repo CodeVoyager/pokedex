@@ -17,6 +17,7 @@ import {
   SetPokemonAction,
   startLoadingAction,
   stopLoadingAction,
+  AllActions,
 } from '../../state/actions';
 import { pokemon as pokemonDetails } from '../../state/selectors';
 import { withTitle } from '../../wrappers/head';
@@ -77,7 +78,10 @@ export function dataGetter(id: number, history: PokemonProps['history']) {
   };
 }
 
-export function getActionDispatcher(dispatch: Dispatch, id: ApiPokemon['id']) {
+export function getActionDispatcher(
+  dispatch: Dispatch<AllActions>,
+  id: ApiPokemon['id']
+) {
   return function actionDispatcher() {
     dispatch(startLoadingAction());
 
