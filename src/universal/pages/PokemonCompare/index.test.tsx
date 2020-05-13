@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { mount, ReactWrapper } from 'enzyme';
 import { left, right } from 'fp-ts/lib/either';
 import { fold, none } from 'fp-ts/lib/Option';
@@ -119,7 +120,7 @@ describe('PokemonCompare', () => {
         .find(Button)
         .at(0)
         .simulate('click');
-      expect(history.push).toBeCalledWith('/pokemon');
+      expect(history.push).toHaveBeenCalledWith('/pokemon');
     });
   });
   describe('DataGetter', () => {
@@ -130,6 +131,7 @@ describe('PokemonCompare', () => {
       useSelector = jest.spyOn(ReactRedux, 'useSelector');
     });
     it('should return None on data incomplete', () => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       useSelector!
         .mockImplementationOnce(() => ({
           a: undefined,
@@ -189,85 +191,93 @@ describe('PokemonCompare', () => {
 
       actionDispatcher();
 
-      expect(dispatch).toBeCalledWith({
+      expect(dispatch).toHaveBeenCalledWith({
         type: 'START',
       });
     });
-    it('should dispatch LOAD STOP action on successful load', next => {
-      const actionDispatcher = getActionDispatcher(
-        dispatch,
-        0,
-        NOT_PRESENT,
-        currentCompare
-      );
+    it('should dispatch LOAD STOP action on successful load', () => {
+      return new Promise(next => {
+        const actionDispatcher = getActionDispatcher(
+          dispatch,
+          0,
+          NOT_PRESENT,
+          currentCompare
+        );
 
-      actionDispatcher().then(() => {
-        expect(dispatch).toHaveBeenCalledWith({
-          type: 'STOP',
+        actionDispatcher().then(() => {
+          expect(dispatch).toHaveBeenCalledWith({
+            type: 'STOP',
+          });
+          next();
         });
-        next();
       });
     });
-    it('should test both pokemon ids', next => {
-      const actionDispatcher = getActionDispatcher(
-        dispatch,
-        NOT_PRESENT,
-        1,
-        currentCompare
-      );
-      const actionDispatcher2 = getActionDispatcher(
-        dispatch,
-        0,
-        NOT_PRESENT,
-        currentCompare
-      );
-      const payload = { field: 'a', item: pokemonB };
-      const payload2 = { field: 'b', item: pokemonB };
+    it('should test both pokemon ids', () => {
+      return new Promise(next => {
+        const actionDispatcher = getActionDispatcher(
+          dispatch,
+          NOT_PRESENT,
+          1,
+          currentCompare
+        );
+        const actionDispatcher2 = getActionDispatcher(
+          dispatch,
+          0,
+          NOT_PRESENT,
+          currentCompare
+        );
+        const payload = { field: 'a', item: pokemonB };
+        const payload2 = { field: 'b', item: pokemonB };
 
-      Promise.all([actionDispatcher(), actionDispatcher2()]).then(
-        ([result, result2]) => {
-          expect(result[0]).toEqual({
+        Promise.all([actionDispatcher(), actionDispatcher2()]).then(
+          ([result, result2]) => {
+            expect(result[0]).toEqual({
+              type: 'SET',
+              payload,
+            });
+            expect(result2[0]).toEqual({
+              type: 'SET',
+              payload: payload2,
+            });
+            next();
+          }
+        );
+      });
+    });
+    it('should dispatch compare set action on succesful load', () => {
+      return new Promise(next => {
+        const actionDispatcher = getActionDispatcher(
+          dispatch,
+          0,
+          NOT_PRESENT,
+          currentCompare
+        );
+        const payload = { field: 'b', item: pokemonB };
+
+        actionDispatcher().then(([action]) => {
+          expect(action).toEqual({
             type: 'SET',
             payload,
           });
-          expect(result2[0]).toEqual({
-            type: 'SET',
-            payload: payload2,
-          });
           next();
-        }
-      );
-    });
-    it('should dispatch compare set action on succesful load', next => {
-      const actionDispatcher = getActionDispatcher(
-        dispatch,
-        0,
-        NOT_PRESENT,
-        currentCompare
-      );
-      const payload = { field: 'b', item: pokemonB };
-
-      actionDispatcher().then(([action]) => {
-        expect(action).toEqual({
-          type: 'SET',
-          payload,
         });
-        next();
       });
     });
-    it('should dispatch ERROR action on error', next => {
-      const actionDispatcher = getActionDispatcher(
-        dispatch,
-        0,
-        ERROR_ID,
-        currentCompare
-      );
+    it('should dispatch ERROR action on error', () => {
+      return new Promise(next => {
+        const actionDispatcher = getActionDispatcher(
+          dispatch,
+          0,
+          ERROR_ID,
+          currentCompare
+        );
 
-      actionDispatcher().then(([action]) => {
-        expect(action).toEqual({
-          type: 'ERROR',
+        actionDispatcher().then(([action]) => {
+          expect(action).toEqual({
+            type: 'ERROR',
+          });
+          next();
         });
-        next();
       });
     });
   });

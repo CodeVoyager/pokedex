@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { initialState, loader } from '.';
 import { State } from '../../store';
 

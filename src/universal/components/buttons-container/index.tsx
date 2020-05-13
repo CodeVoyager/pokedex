@@ -7,5 +7,5 @@ export interface Props {
 }
 
 export function ButtonsContainer({ children }: Props) {
-  return <div className="pokemon-buttons-container" children={children} />;
+  return <div className="pokemon-buttons-container">{children}</div>;
 }

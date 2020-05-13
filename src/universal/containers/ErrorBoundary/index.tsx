@@ -2,20 +2,23 @@ import React, { ErrorInfo } from 'react';
 
 export type State = {
   hasError: boolean;
+  error?: Error;
+  errorInfo?: ErrorInfo;
 };
 
-export class ErrorBoundary extends React.Component<any, State> {
+export class ErrorBoundary extends React.Component<unknown, State> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(props: any) {
     super(props);
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(e: Error) {
-    return { hasError: true };
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    this.setState({ hasError: true });
+    this.setState({ hasError: true, error, errorInfo });
 
     // console.log('----------------');
     // console.error(error, errorInfo);

@@ -12,8 +12,9 @@ export function Button({ children, onClick, mini }: Props) {
   return (
     <button
       className={`pokemon-button ${mini ? 'pokemon-button-mini' : ''}`}
-      children={children}
       onClick={onClick}
-    />
+    >
+      {children}
+    </button>
   );
 }

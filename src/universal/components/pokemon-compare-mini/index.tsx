@@ -37,7 +37,9 @@ export function PokemonCompareMini({ a, b }: Props) {
       <div className="pokemon-compare-mini-items">{items}</div>
       <div className="pokemon-compare-mini-controls">
         {url ? (
-          <Link className="pokemon-compare-go-to" to={url} children="Compare" />
+          <Link className="pokemon-compare-go-to" to={url}>
+            Compare
+          </Link>
         ) : null}
       </div>
     </div>

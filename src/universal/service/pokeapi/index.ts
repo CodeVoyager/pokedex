@@ -16,6 +16,7 @@ export interface PokeAPIService<U extends BaseItem> {
 }
 
 const API_ENDPOINT = 'https://pokeapi.co/api/v2';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const cache: { [x: string]: { [y: string]: any } } = {};
 export const ITEMS_PER_PAGE = 20;
 
@@ -31,7 +32,7 @@ function ApiRequestFactory<T extends BaseItem>(
   endpoint: string
 ): PokeAPIService<T> {
   return {
-    list: (page: number = 0) => {
+    list: (page = 0) => {
       const valFromCache = getFromCache<PokemonResponse>(endpoint, page);
 
       if (valFromCache) {

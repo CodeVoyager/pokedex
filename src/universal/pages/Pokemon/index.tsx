@@ -31,7 +31,7 @@ export interface PokemonContentProps {
   pokemon: Pokemon;
 }
 
-interface PokemonProps extends RouteComponentProps<PokemonRouteParams> {}
+type PokemonProps = RouteComponentProps<PokemonRouteParams>;
 
 export function PokemonPage({
   match: {

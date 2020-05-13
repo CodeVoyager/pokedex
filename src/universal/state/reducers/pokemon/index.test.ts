@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { initialState, pokemon } from '.';
 
 describe('State::Reducers', () => {

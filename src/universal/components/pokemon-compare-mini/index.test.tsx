@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PokemonCompareMini, getUrlForIds, renderItem } from '.';
 import { shallow } from 'enzyme';
 import { PokemonTileItem } from '../pokemon-tile';
@@ -16,16 +17,17 @@ describe('Component', () => {
     });
     describe('renderItem', () => {
       test('should handle data not present', () => {
-        expect(renderItem(undefined)).toBe(null);
+        expect(renderItem(undefined)).toBeNull();
       });
       test('should handle valid data', () => {
         const data = {
           id: 1,
         } as any;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const result = shallow(renderItem(data)!);
 
         expect(result.hasClass('pokemon-compare-mini-image')).toBe(true);
-        expect(result.find('[alt="pokemon-image"]').length).toBe(1);
+        expect(result.find('[alt="pokemon-image"]')).toHaveLength(1);
         expect(result.find('[alt="pokemon-image"]').get(0).props.src).toBe(
           '/image/1'
         );
@@ -45,9 +47,9 @@ describe('Component', () => {
       const component3 = shallow(
         <PokemonCompareMini a={undefined} b={pokemon} />
       );
-      expect(component1.find('.pokemon-compare-go-to').length).toBe(0);
-      expect(component2.find('.pokemon-compare-go-to').length).toBe(0);
-      expect(component3.find('.pokemon-compare-go-to').length).toBe(0);
+      expect(component1.find('.pokemon-compare-go-to')).toHaveLength(0);
+      expect(component2.find('.pokemon-compare-go-to')).toHaveLength(0);
+      expect(component3.find('.pokemon-compare-go-to')).toHaveLength(0);
     });
     it('should create redirect link on both pokemon present', () => {
       const pokemon: PokemonTileItem = {
@@ -62,7 +64,7 @@ describe('Component', () => {
         <PokemonCompareMini a={pokemon} b={pokemon2} />
       );
 
-      expect(component.find('.pokemon-compare-go-to').length).toBe(1);
+      expect(component.find('.pokemon-compare-go-to')).toHaveLength(1);
       expect(component.find('.pokemon-compare-go-to').get(0).props.to).toEqual(
         '/pokemon/compare/1/2'
       );

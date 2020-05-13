@@ -1,7 +1,7 @@
 import { fold } from 'fp-ts/lib/Either';
 import { fold as optionFold, fromNullable } from 'fp-ts/lib/Option';
 import { pipe } from 'fp-ts/lib/pipeable';
-import React, { useEffect, useDebugValue } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action, Dispatch } from 'redux';
 import { PokemonResponse } from '../../../types/pokeapi';
@@ -105,6 +105,7 @@ export function renderPokemons(ps: ReturnType<typeof pokemonList>) {
 }
 
 export function pushToCompare(p: PokemonTileItem) {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const dispatch = useDispatch();
   return () => {
     dispatch(pushPokemonCompareCandidateAction(p));

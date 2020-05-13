@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
-export function withTitle<T>(title: string = '') {
+export function withTitle<T>(title = '') {
   return (Component: React.ComponentClass<T> | React.FC<T>): React.FC<T> => {
     return function WithTitleComponent(props: T) {
       return (

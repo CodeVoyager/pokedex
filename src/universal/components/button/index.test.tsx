@@ -48,8 +48,8 @@ describe('Component', () => {
 
       component.simulate('click');
 
-      expect(onClick).toBeCalled();
-      expect(onClick).toBeCalledTimes(1);
+      expect(onClick).toHaveBeenCalled();
+      expect(onClick).toHaveBeenCalledTimes(1);
     });
   });
 });

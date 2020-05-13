@@ -4,7 +4,7 @@ import { pipe } from 'fp-ts/lib/pipeable';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, useHistory } from 'react-router';
-import { Action, Dispatch } from 'redux';
+import { Dispatch } from 'redux';
 import { Pokemon } from '../../../types/pokeapi';
 import { Button } from '../../components/button';
 import { ButtonsContainer } from '../../components/buttons-container';
@@ -26,8 +26,10 @@ import { withRouteData } from '../../wrappers/route-data';
 
 import './index.css';
 
-export interface PokemonCompareProps
-  extends RouteComponentProps<{ aId: string; bId: string }> {}
+export type PokemonCompareProps = RouteComponentProps<{
+  aId: string;
+  bId: string;
+}>;
 
 export type ValidField = keyof State['pokemonCompare']['current'];
 
@@ -57,7 +59,8 @@ function PokemonCompareContent({ a, b }: State['pokemonCompare']['current']) {
   return (
     <div className="pokemon-compare">
       <div className="pokemon-compare-items">
-        {[a!, b!].map(pokemon => (
+        {// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        [a!, b!].map(pokemon => (
           <PokemonDetails key={pokemon.id} k={pokemon.id} pokemon={pokemon} />
         ))}
       </div>
@@ -72,6 +75,7 @@ function PokemonCompareContent({ a, b }: State['pokemonCompare']['current']) {
 
 export function dataGetter(aId: number, bId: number) {
   return function getData() {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const currentCompare = useSelector(compareCurrent);
     const { a, b } = currentCompare;
 
@@ -113,7 +117,7 @@ export function candidateShouldBeLoaded(
   compared: ReturnType<typeof compareCurrent>['a'],
   id: number
 ) {
-  return !compared || compared!.id !== id;
+  return compared?.id !== id;
 }
 
 function get(

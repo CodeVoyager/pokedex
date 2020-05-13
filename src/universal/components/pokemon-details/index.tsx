@@ -6,7 +6,7 @@ import { fromNullable, fold } from 'fp-ts/lib/Option';
 
 export interface Props {
   pokemon: Pokemon;
-  k?: any;
+  k?: string | number;
 }
 
 export function PokemonDetails({ pokemon, k }: Props) {
@@ -14,7 +14,9 @@ export function PokemonDetails({ pokemon, k }: Props) {
     <div className="pokemon-details" key={k}>
       <div className="pokemon-details-left">
         {Object.entries(pokemon.sprites)
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           .filter(([_, v]) => v)
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           .sort(([ka, _], [kb, __]) => {
             if (0 === ka.indexOf('front')) {
               if (0 === kb.indexOf('front')) {

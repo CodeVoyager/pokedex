@@ -7,25 +7,23 @@ type DataGetter<T> = () => Option<T>;
 type ComponentWithData<T> = React.FC<T> | React.ComponentClass<T>;
 
 export function withRouteData<T>(
-  dataGetter: DataGetter<T>,
+  dataFetcher: DataGetter<T>,
   actionDispatcher: () => Promise<AllActions[]>
 ) {
   return function ComponentWithData(Component: ComponentWithData<T>) {
-    const { useEffect, useCallback } = React;
-    const data = dataGetter();
+    const { useEffect } = React;
+    const data = dataFetcher();
     const render = fold(
       () => <Loader />,
       (props: T) => <Component {...props} />
     );
 
-    useEffect(
-      useCallback(() => {
-        if (isNone(data)) {
-          actionDispatcher();
-        }
-      }, [render]),
-      [dataGetter, actionDispatcher]
-    );
+    useEffect(() => {
+      if (isNone(data)) {
+        actionDispatcher();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dataFetcher, actionDispatcher]);
 
     return render(data);
   };

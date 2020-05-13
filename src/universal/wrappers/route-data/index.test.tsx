@@ -1,3 +1,6 @@
+/* eslint-disable react/display-name */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { mount } from 'enzyme';
 import { none, some } from 'fp-ts/lib/Option';
 import React from 'react';
@@ -14,7 +17,7 @@ describe('RouteData', () => {
     const dataGetterNone = () => none;
     const dataGetterSome = () => some({ foo: 'bar' });
     const action = { type: 'LOAD' };
-    const actionDispatcher = jest.fn(() => action as Action<string>);
+    const actionDispatcher = jest.fn(() => action as Action<string>) as any;
     const Component = ({ foo }: any) => <div data-foo={foo}>CONTENT</div>;
 
     beforeEach(() => {
@@ -49,7 +52,7 @@ describe('RouteData', () => {
       const resultComponent = componentWrapper(Component);
 
       mount(resultComponent);
-      expect(actionDispatcher).toBeCalled();
+      expect(actionDispatcher).toHaveBeenCalled();
     });
 
     it('should not call action dispatcher on data present when mounted', () => {
@@ -58,7 +61,7 @@ describe('RouteData', () => {
 
       mount(resultComponent);
 
-      expect(actionDispatcher).not.toBeCalled();
+      expect(actionDispatcher).not.toHaveBeenCalled();
     });
 
     it('should use display component when data is present', () => {

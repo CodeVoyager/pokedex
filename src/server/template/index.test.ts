@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { load } from 'cheerio';
 import { pageTemplate } from '.';
 
@@ -45,9 +46,9 @@ describe('pageTemplate()', () => {
     const script = result(`script[src="/${ASSETS.app.js}"]`);
     const script2 = result('script[src="http://localhost:5005/app.js"]');
 
-    expect(stylesheet.length).toEqual(1);
-    expect(script.length).toEqual(1);
-    expect(script2.length).toEqual(0);
+    expect(stylesheet).toHaveLength(1);
+    expect(script).toHaveLength(1);
+    expect(script2).toHaveLength(0);
   });
   it('should NOT use webpack generated filenames for DEV env', () => {
     const result = load(pageTemplate(html, state, 'dev'));
@@ -57,9 +58,9 @@ describe('pageTemplate()', () => {
     const script = result(`script[src="/${ASSETS.app.js}"]`);
     const script2 = result('script[src="http://localhost:5005/app.js"]');
 
-    expect(stylesheet.length).toEqual(0);
-    expect(script.length).toEqual(0);
-    expect(script2.length).toEqual(1);
+    expect(stylesheet).toHaveLength(0);
+    expect(script).toHaveLength(0);
+    expect(script2).toHaveLength(1);
   });
   it('should close connection to __REACT_DEVTOOLS_GLOBAL_HOOK__ in production', () => {
     const result = pageTemplate(html, state, 'production');

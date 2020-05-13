@@ -1,4 +1,3 @@
-import { Request } from 'express';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { Helmet } from 'react-helmet';
@@ -36,7 +35,7 @@ export function extendEmptyState(partialState: Partial<State>): State {
 
 export function wrapPageElement(
   location: string,
-  store: Store<State, BackendActions>,
+  store: Store<State, AllActions>,
   page: JSX.Element
 ) {
   return (
@@ -54,7 +53,7 @@ export function renderPage(
 ) {
   const store = configureStore(state);
 
-  actions.forEach(action => store.dispatch(action as any));
+  actions.forEach(action => store.dispatch(action as AllActions));
 
   return pageTemplate(
     renderReact(wrapPageElement(path, store, page)),
