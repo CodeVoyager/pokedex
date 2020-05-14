@@ -2,7 +2,7 @@ import * as path from 'path';
 require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env') });
 import express from 'express';
 import logger from 'morgan';
-import { indexRouter } from './routes/index';
+import { indexRouter } from './components/app/routes';
 
 const app = express();
 

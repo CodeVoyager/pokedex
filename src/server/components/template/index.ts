@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import assets from '../../../webpack-assets.json';
-import { State } from '../../universal/state/store/index.js';
+import assets from '../../../../webpack-assets.json';
+import { State } from '../../../universal/state/store/index.js';
 
 interface TemplateHtml {
   body: string;

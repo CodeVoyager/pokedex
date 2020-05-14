@@ -7,11 +7,10 @@ import { Header } from '../../components/header';
 import { Loader } from '../../components/loader';
 import { PokemonPage } from '../../pages/Pokemon';
 import { isLoading } from '../../state/selectors';
-import { withTitle } from '../../wrappers/head';
 import { ErrorBoundary } from '../ErrorBoundary';
-import { PokemonList } from '../PokemonList';
 import './index.css';
 import { PokemonComparePage } from '../../pages/PokemonCompare';
+import { PokemonListPage } from '../../pages/PokemonList';
 
 export function App() {
   const showLoader = useSelector(isLoading);
@@ -23,12 +22,9 @@ export function App() {
         <Header />
         <Switch>
           <Redirect from="/" to="/pokemon" exact />
-          <Route
-            path="/pokemon"
-            exact
-            component={withTitle('All Pokemons')(PokemonList)}
-          />
-          <Route path="/pokemon/:id" exact component={PokemonPage} />
+          <Redirect from="/pokemon" to="/pokemon/1" exact />
+          <Route path="/pokemon/:page" exact component={PokemonListPage} />
+          <Route path="/pokemon/details/:id" exact component={PokemonPage} />
           <Route
             path="/pokemon/compare/:aId/:bId"
             exact

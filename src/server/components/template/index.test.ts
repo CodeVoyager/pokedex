@@ -2,7 +2,7 @@
 import { load } from 'cheerio';
 import { pageTemplate } from '.';
 
-jest.mock('../../../webpack-assets.json', () => ({
+jest.mock('../../../../webpack-assets.json', () => ({
   app: {
     js: 'APP.js',
     css: 'APP.css',

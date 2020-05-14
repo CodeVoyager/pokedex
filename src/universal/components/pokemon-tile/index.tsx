@@ -19,7 +19,7 @@ export function getImageUrlForId(id: Pokemon['id']) {
 }
 
 export function getUrlForId(id: Pokemon['id']) {
-  return `/pokemon/${id}`;
+  return `/pokemon/details/${id}`;
 }
 
 export function PokemonTile({ pokemon: { id, name }, onCompareClick }: Props) {

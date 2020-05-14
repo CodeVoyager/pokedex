@@ -19,6 +19,7 @@ export const setPokemonAction = createAction<Pokemon>(
 );
 
 export type SetPokemonAction = ReturnType<typeof setPokemonAction>;
+export type SetPokemonListAction = ReturnType<typeof setPokemonListAction>;
 
 export type PokemonActions =
   | ReturnType<typeof setPokemonListPageAction>

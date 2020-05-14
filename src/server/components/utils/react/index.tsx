@@ -4,8 +4,11 @@ import { Helmet } from 'react-helmet';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
 import { Store, Dispatch, Action } from 'redux';
-import { AllActions, SetErrorAction } from '../../../universal/state/actions';
-import { configureStore, State } from '../../../universal/state/store';
+import {
+  AllActions,
+  SetErrorAction,
+} from '../../../../universal/state/actions';
+import { configureStore, State } from '../../../../universal/state/store';
 import { pageTemplate } from '../../template';
 
 export type BackendActions = Exclude<AllActions, SetErrorAction>;
