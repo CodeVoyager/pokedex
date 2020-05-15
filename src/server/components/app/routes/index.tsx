@@ -11,4 +11,8 @@ indexRouter.get('/', (_, res) => {
   res.redirect('/pokemon/1');
 });
 
+indexRouter.get('/pokemon', (_, res) => {
+  res.redirect('/pokemon/1');
+});
+
 export { indexRouter };

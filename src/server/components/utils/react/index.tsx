@@ -56,7 +56,7 @@ export function renderPage(
 ) {
   const store = configureStore(state);
 
-  actions.forEach(action => store.dispatch(action as AllActions));
+  actions.forEach(action => store.dispatch(action));
 
   return pageTemplate(
     renderReact(wrapPageElement(path, store, page)),

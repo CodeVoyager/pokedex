@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import React from 'react';
+import { Dispatch } from 'redux';
+import { Action } from 'redux-actions';
 import { App } from '../../../../universal/containers/App';
 import { getActionDispatcher as pokemonDetailsActionDispatcher } from '../../../../universal/pages/Pokemon';
 import { getActionDispatcher as pokemonCompareActionDispatcher } from '../../../../universal/pages/PokemonCompare';
@@ -11,55 +13,55 @@ import {
   renderPage,
 } from '../../utils/react';
 
-/**
- * TODO: Make it DRY
- */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ControllerHandler<T extends Action<any>> = (
+  req: Request,
+  dispatch: Dispatch<T>
+) => () => Promise<T[]>;
+
 export const getPokemonList = (
-  { path, params: { page } }: Request,
-  res: Response
+  { params: { page } }: Request,
+  dispatch: Dispatch<AllActions>
 ) => {
-  const { dispatch, getActions } = getActionCollector<AllActions>();
-  const getPokemonList = pokemonListActionDispatcher(
-    dispatch,
-    parseInt(page, 10)
-  );
-
-  getPokemonList().then(() => {
-    res.send(renderPage(path, getEmptyState(), <App />, getActions()));
-  });
+  return pokemonListActionDispatcher(dispatch, parseInt(page, 10));
 };
+
 export const getPokemon = (
-  { path, params: { id } }: Request,
-  res: Response
+  { params: { id } }: Request,
+  dispatch: Dispatch<AllActions>
 ) => {
-  const { dispatch, getActions } = getActionCollector<AllActions>();
-  const getPokemon = pokemonDetailsActionDispatcher(dispatch, parseInt(id, 10));
-
-  getPokemon().then(() => {
-    res.send(renderPage(path, getEmptyState(), <App />, getActions()));
-  });
+  return pokemonDetailsActionDispatcher(dispatch, parseInt(id, 10));
 };
+
 export const getPokemonCompare = (
-  { params: { aId, bId }, path }: Request,
-  res: Response
+  { params: { aId, bId } }: Request,
+  dispatch: Dispatch<AllActions>
 ) => {
-  const { dispatch, getActions } = getActionCollector<AllActions>();
-  const getPokemons = pokemonCompareActionDispatcher(
+  return pokemonCompareActionDispatcher(
     dispatch,
     parseInt(aId, 10),
     parseInt(bId, 10),
     {}
   );
-
-  getPokemons().then(() => {
-    res.send(renderPage(path, getEmptyState(), <App />, getActions()));
-  });
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function controllerFactory<T extends Action<any>>(
+  handler: ControllerHandler<T>
+) {
+  return (req: Request, res: Response) => {
+    const { dispatch, getActions } = getActionCollector<T>();
+
+    handler(req, dispatch)().then(() => {
+      res.send(renderPage(req.path, getEmptyState(), <App />, getActions()));
+    });
+  };
+}
 
 export const pokemonRoutesMap = {
   get: {
-    '/pokemon/:page': getPokemonList,
-    '/pokemon/details/:id': getPokemon,
-    '/pokemon/compare/:aId/:bId': getPokemonCompare,
+    '/pokemon/:page': controllerFactory(getPokemonList),
+    '/pokemon/details/:id': controllerFactory(getPokemon),
+    '/pokemon/compare/:aId/:bId': controllerFactory(getPokemonCompare),
   },
 };

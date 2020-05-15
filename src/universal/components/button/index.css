@@ -11,7 +11,9 @@
   font-weight: 700;
   line-height: 18px;
   padding: 10px;
+  text-align: center;
   text-transform: uppercase;
+  text-decoration: none;
   transition: background 0.8s linear;
   min-width: 250px;
   &:hover {
