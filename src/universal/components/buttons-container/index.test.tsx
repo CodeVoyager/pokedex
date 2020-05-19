@@ -7,7 +7,7 @@ describe('Component::ButtonsContainer', () => {
     expect(shallow(<ButtonsContainer>CONTENT</ButtonsContainer>))
       .toMatchInlineSnapshot(`
       <div
-        className="pokemon-buttons-container"
+        className="pokemon-buttons-container "
       >
         CONTENT
       </div>

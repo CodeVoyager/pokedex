@@ -7,14 +7,14 @@ describe('Component', () => {
     test("should work on it's own", () => {
       expect(shallow(<Button />)).toMatchInlineSnapshot(`
         <button
-          className="pokemon-button "
+          className="pokemon-button  "
         />
       `);
     });
     test('should use specified children', () => {
       expect(shallow(<Button>CONTENT</Button>)).toMatchInlineSnapshot(`
         <button
-          className="pokemon-button "
+          className="pokemon-button  "
         >
           CONTENT
         </button>
@@ -27,7 +27,7 @@ describe('Component', () => {
         )
       ).toMatchInlineSnapshot(`
         <button
-          className="pokemon-button "
+          className="pokemon-button  "
         >
           <div>
             CONTENT IN DIV
@@ -38,7 +38,7 @@ describe('Component', () => {
     test('should handle specifing button as mini version', () => {
       expect(shallow(<Button mini />)).toMatchInlineSnapshot(`
         <button
-          className="pokemon-button pokemon-button-mini"
+          className="pokemon-button pokemon-button-mini "
         />
       `);
     });

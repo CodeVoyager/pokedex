@@ -1,11 +1,12 @@
-import React from 'react';
-
+import React, { HTMLAttributes } from 'react';
 import './index.css';
 
-export interface Props {
-  children: null | string | React.ReactChild | React.ReactChild[];
-}
+export type Props = HTMLAttributes<HTMLDivElement>;
 
-export function ButtonsContainer({ children }: Props) {
-  return <div className="pokemon-buttons-container">{children}</div>;
+export function ButtonsContainer({ children, className }: Props) {
+  return (
+    <div className={`pokemon-buttons-container ${className ? className : ''}`}>
+      {children}
+    </div>
+  );
 }

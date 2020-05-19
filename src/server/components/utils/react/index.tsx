@@ -9,7 +9,7 @@ import {
   SetErrorAction,
 } from '../../../../universal/state/actions';
 import { configureStore, State } from '../../../../universal/state/store';
-import { pageTemplate } from '../../template';
+import { pageTemplate } from '../../app/template';
 
 export type BackendActions = Exclude<AllActions, SetErrorAction>;
 
